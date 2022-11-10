@@ -96,7 +96,7 @@ HAL_StatusTypeDef TIM2_Init()
   // Initialize TIM2
   tim2_handle.Instance = TIM2;
   tim2_handle.Init.Period = 72000000;
-  tim2_handle.Init.Prescaler = 0;
+  tim2_handle.Init.Prescaler = 1;	// xN will slow N times
   tim2_handle.Init.ClockDivision = 0U;
   tim2_handle.Init.CounterMode = TIM_COUNTERMODE_UP;
   tim2_handle.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
@@ -132,7 +132,7 @@ HAL_StatusTypeDef TIM1_Init()
   // Initialize TIM1 in a similar way as above
   tim1_handle.Instance = TIM1;
   tim1_handle.Init.Period = 72000000;
-  tim1_handle.Init.Prescaler = 0;
+  tim1_handle.Init.Prescaler = 1;	// xN makes it N time slower
   tim1_handle.Init.ClockDivision = 0U;
   tim1_handle.Init.CounterMode = TIM_COUNTERMODE_UP;
   tim1_handle.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
@@ -142,7 +142,7 @@ HAL_StatusTypeDef TIM1_Init()
   // setup and start TIM1's UPDATE interrupts
   HAL_NVIC_SetPriority(TIM1_UP_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(TIM1_UP_IRQn);
-  __HAL_RCC_TIM1_CLK_ENABLE();
+  //__HAL_RCC_TIM1_CLK_ENABLE();
   return HAL_TIM_Base_Start_IT(&tim1_handle);
 }
 
