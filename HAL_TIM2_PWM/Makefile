@@ -34,7 +34,7 @@ OPT = -Os
 BUILD_DIR = build
 
 # Drivers path
-DRIVERS_DIR = Drivers/STM32F1xx_HAL_Driver
+DRIVERS_DIR = ./Drivers1/STM32F1xx_HAL_Driver
 
 # C includes
 C_INCLUDES =  \
@@ -42,8 +42,8 @@ C_INCLUDES =  \
 -IInc \
 -I$(DRIVERS_DIR)/Inc \
 -I$(DRIVERS_DIR)/Inc/Legacy \
--IDrivers/CMSIS/Device/ST/STM32F1xx/Include \
--IDrivers/CMSIS/Include
+-I./Drivers1/CMSIS/Device/ST/STM32F1xx/Include \
+-I./Drivers1/CMSIS/Include
 
 ######################################
 # source
