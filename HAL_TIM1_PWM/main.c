@@ -14,6 +14,7 @@
 void GPIO_Init();
 HAL_StatusTypeDef TIM1_PWM1_Init();
 void SystemClock_Config();
+void Error_Handler();
 
 TIM_HandleTypeDef tim1_handle;
 
@@ -127,6 +128,13 @@ HAL_StatusTypeDef TIM1_PWM1_Init()
   if (HAL_TIM_Base_Init(&tim1_handle) == HAL_ERROR) return HAL_ERROR;
   if (HAL_TIM_PWM_Init (&tim1_handle) == HAL_ERROR) printf("BBBBADD");
 
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&tim1_handle, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
   TIM_MasterConfigTypeDef sMasterConfig;
   sMasterConfig.MasterOutputTrigger = TIM_TRGO_ENABLE;
   sMasterConfig.MasterSlaveMode     = TIM_MASTERSLAVEMODE_DISABLE;
@@ -173,3 +181,6 @@ void TIM1_UP_IRQHandler(void)
   __HAL_TIM_CLEAR_IT(&tim1_handle, TIM_IT_UPDATE);
 }
 
+void Error_Handler()
+{ // useful as a breakpoint in gdb
+}
