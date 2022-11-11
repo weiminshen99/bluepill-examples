@@ -142,7 +142,7 @@ HAL_StatusTypeDef TIM1_PWM1_Init()
 
   TIM_OC_InitTypeDef sConfigOC;
   sConfigOC.OCMode       = TIM_OCMODE_PWM1;
-  sConfigOC.Pulse        = 100; // make it visible
+  sConfigOC.Pulse        = 0;
   sConfigOC.OCPolarity   = TIM_OCPOLARITY_HIGH;
   sConfigOC.OCNPolarity  = TIM_OCNPOLARITY_LOW;
   sConfigOC.OCFastMode   = TIM_OCFAST_DISABLE;
