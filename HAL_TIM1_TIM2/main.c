@@ -62,25 +62,27 @@ void SystemClock_Config(void) {
 //===========================
 //	PC13 LED
 //===========================
+
+volatile uint32_t* GPIOC_BSRR = (volatile uint32_t*) 0x40011010; // Port C
+volatile uint32_t led_state = 0;
+
 void PC13_led_init(void)
 {
   volatile uint32_t* RCC_APB2ENR = (volatile uint32_t*) 0x40021018;     // RCC
   volatile uint32_t* GPIOC_CRH =  (volatile uint32_t*) 0x40011004;      // Port C
   *RCC_APB2ENR |= (0b1<<4);     // set bit4=1 to enable Port C
   *GPIOC_CRH &= ~(0b1111<<20);  // clear PC13, bits 23..20
-  *GPIOC_CRH |=  (0b0110<<20);  // set the bits to 0110 for Mode Output 2
+  *GPIOC_CRH  |=  (0b0110<<20);  // set the bits to 0110 for Mode Output 2
+  *GPIOC_BSRR |= ((uint32_t) 1 << (13 + 0)); // turn off PC13/LED
 }
 
 void PC13_led_toggle(void)
 {
-  volatile uint32_t* GPIOC_BSRR = (volatile uint32_t*) 0x40011010;      // Port C
-  volatile uint32_t led_state = 0;
-
-  if (led_state) {
-        *GPIOC_BSRR |= ((uint32_t) 1 << (13 + 0));  // LED on
+  if (led_state) { // make PC13/LED OFF
+        *GPIOC_BSRR |= ((uint32_t) 1 << (13 + 0));
         led_state = 0;
-  } else {
-        *GPIOC_BSRR |= ((uint32_t) 1 << (13 + 16));  // LED off
+  } else { // make it ON
+        *GPIOC_BSRR |= ((uint32_t) 1 << (13 + 16));
         led_state = 1;
   }
 }
@@ -142,7 +144,7 @@ HAL_StatusTypeDef TIM1_Init()
   // setup and start TIM1's UPDATE interrupts
   HAL_NVIC_SetPriority(TIM1_UP_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(TIM1_UP_IRQn);
-  //__HAL_RCC_TIM1_CLK_ENABLE();
+  __HAL_RCC_TIM1_CLK_ENABLE();
   return HAL_TIM_Base_Start_IT(&tim1_handle);
 }
 
@@ -151,7 +153,6 @@ void TIM1_UP_IRQHandler(void)
   HAL_TIM_IRQHandler(&tim1_handle);
   // begin user code
   HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13); // toggle PC13/LED
-  //HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, RESET); // turn ON PC13/LED
   // end user code
   __HAL_TIM_CLEAR_IT(&tim1_handle, TIM_IT_UPDATE);
 }
@@ -180,7 +181,7 @@ int main(void) {
 
   TIM1_Init();
 
-  TIM2_Init();
+//  TIM2_Init();
 
   if (HAL_InitTick(0) != HAL_ERROR)
   {
@@ -191,8 +192,9 @@ int main(void) {
 
   while(1)
     {
-//	HAL_Delay(100);	// it is about 500 ms
-//	PC13_led_toggle();
+	HAL_Delay(100);	// it is about 500 ms
+	//HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13); // toggle PC13/LED
+	//PC13_led_toggle();
     }
 }
 

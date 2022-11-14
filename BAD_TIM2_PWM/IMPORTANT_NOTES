@@ -1,0 +1,43 @@
+
+// ==========================================================
+// When a Bluepill is new, st-info and st-flash all works well
+// ==========================
+weiminshen99$ st-info --probe
+Failed to parse flash type or unrecognized flash type
+Found 1 stlink programmers
+  version:    V2J17S4
+  serial:     09171113A315303030303032
+  flash:      65536 (pagesize: 1024)
+  sram:       20480
+  chipid:     0x410
+  dev-type:   STM32F1xx_MD
+MacBookPro:HAL_TIM2_blink weiminshen99$ 
+
+// =============
+// Now you can flash HAL_TIM2_blink as many times as you like
+// Things are OK, but ...
+// =============
+
+// ==========================
+// But after loading HAL_TIM2_PWM several times,
+// Bluepill becomes bad, and cannot be flash again.
+// Don't know why yet.
+// ==========================
+$ st-info --probe
+Failed to parse flash type or unrecognized flash type
+Found 1 stlink programmers
+  version:    V2J17S4
+  serial:     09171113A315303030303032
+  flash:      0 (pagesize: 0)
+  sram:       0
+  chipid:     0x000
+  dev-type:   unknown
+
+// The REASON might be that 
+// HAL_TIM2_blink uses startup_stm32f103xb.s, 
+// HAL_TIM2_PWM uses startup_stm32f103c8tx.s <=== THIS IS BAD;
+// In addition, the two direcotories have different
+//        STM32F103C8Tx_FLASH.ld
+//        (need to compare them to see the diff)
+
+

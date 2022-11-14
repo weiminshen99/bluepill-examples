@@ -48,12 +48,12 @@ int main(void) {
   PC13_led_init();
 
   //MX_TIM_Init(); // see HAL_tim2.c
-  HAL_TIM_Base_Start_IT(&Tim2Handle);
+//  HAL_TIM_Base_Start_IT(&Tim2Handle);
 
   while(1)
     {
-//	HAL_Delay(100);	// it is about 500 ms
-//	PC13_led_toggle();
+	HAL_Delay(100);	// it is about 500 ms
+	PC13_led_toggle();
     }
 }
 
