@@ -60,6 +60,7 @@ $(DRIVERS_DIR)/Src/stm32f1xx_hal_rcc_ex.c \
 $(DRIVERS_DIR)/Src/stm32f1xx_hal_gpio.c \
 $(DRIVERS_DIR)/Src/stm32f1xx_hal_gpio_ex.c \
 main.c \
+tim1_pwm.c \
 #$(DRIVERS_DIR)/Src/stm32f1xx_hal_flash.c \
 #$(DRIVERS_DIR)/Src/stm32f1xx_hal_pwr.c \
 #$(DRIVERS_DIR)/Src/stm32f1xx_hal_adc_ex.c \
