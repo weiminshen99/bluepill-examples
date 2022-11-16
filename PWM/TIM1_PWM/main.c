@@ -200,19 +200,17 @@ int main(void) {
   {
 /*
         while(CH1_DC < 65535)
-        {
-                TIM1->CCR1 = CH1_DC;
-                CH1_DC += 70;
-                HAL_Delay(1);
+        { // increase PWM duty cycles
+          TIM1->CCR1 = CH1_DC;
+          CH1_DC += 70;
+          HAL_Delay(1);
         }
-        //CH1_DC = 65535;
         while(CH1_DC > 0)
-        {
+        { // decrease PWM duty cycles
             TIM1->CCR1 = CH1_DC;
             CH1_DC -= 70;
             HAL_Delay(1);
         }
-        //CH1_DC = 0;
 */
         HAL_Delay(100); // is it about 500 ms?
         HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13); // PC13 LED

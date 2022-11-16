@@ -37,8 +37,6 @@ void GPIO_Init_for_PWM()
 
 void TIM1_PWM1_Init()
 {
-  __HAL_RCC_TIM1_CLK_ENABLE();  // start TIM1's clock
-
   // Initialize TIM1 in a similar way as above
   tim1_handle.Instance = TIM1;
   tim1_handle.Init.Period = 2000;
@@ -46,7 +44,7 @@ void TIM1_PWM1_Init()
   tim1_handle.Init.RepetitionCounter = 0;
   tim1_handle.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   tim1_handle.Init.CounterMode = TIM_COUNTERMODE_CENTERALIGNED1;
-  tim1_handle.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
+  tim1_handle.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&tim1_handle) != HAL_OK)
   {
     Error_Handler();
@@ -65,7 +63,7 @@ void TIM1_PWM1_Init()
   }
 
   TIM_MasterConfigTypeDef sMasterConfig;
-  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET; // TIM_TRGO_ENABLE;
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_ENABLE; // TIM_TRGO_ENABLE, RESET ?
   sMasterConfig.MasterSlaveMode     = TIM_MASTERSLAVEMODE_DISABLE;
   if (HAL_TIMEx_MasterConfigSynchronization(&tim1_handle,&sMasterConfig)!=HAL_OK)
   {
@@ -97,6 +95,9 @@ void TIM1_PWM1_Init()
   {
     Error_Handler();
   }
+
+  __HAL_RCC_TIM1_CLK_ENABLE();  // start TIM1's clock
+
   // Enable all three channels for PWM output
   HAL_TIM_PWM_Start(&tim1_handle, TIM_CHANNEL_1);
   HAL_TIMEx_PWMN_Start(&tim1_handle, TIM_CHANNEL_1);
