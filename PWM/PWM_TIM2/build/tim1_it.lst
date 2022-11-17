@@ -1,0 +1,230 @@
+ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccb3vHih.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.syntax unified
+  15              		.file	"tim1_it.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.text.TIM1_IT_Init,"ax",%progbits
+  20              		.align	1
+  21              		.global	TIM1_IT_Init
+  22              		.thumb
+  23              		.thumb_func
+  25              	TIM1_IT_Init:
+  26              	.LFB64:
+  27              		.file 1 "tim1_it.c"
+   1:tim1_it.c     **** 
+   2:tim1_it.c     **** #include "stm32f1xx_hal.h"
+   3:tim1_it.c     **** 
+   4:tim1_it.c     **** TIM_HandleTypeDef tim1_handle;
+   5:tim1_it.c     **** 
+   6:tim1_it.c     **** HAL_StatusTypeDef TIM1_IT_Init()
+   7:tim1_it.c     **** {
+  28              		.loc 1 7 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 8
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32 0000 37B5     		push	{r0, r1, r2, r4, r5, lr}
+  33              	.LCFI0:
+  34              		.cfi_def_cfa_offset 24
+  35              		.cfi_offset 4, -12
+  36              		.cfi_offset 5, -8
+  37              		.cfi_offset 14, -4
+   8:tim1_it.c     ****   // Initialize TIM1 in a similar way as above
+   9:tim1_it.c     ****   tim1_handle.Instance = TIM1;
+  38              		.loc 1 9 0
+  39 0002 134B     		ldr	r3, .L7
+  40 0004 134C     		ldr	r4, .L7+4
+  10:tim1_it.c     ****   tim1_handle.Init.Period = 72000000;
+  11:tim1_it.c     ****   tim1_handle.Init.Prescaler = 1;	// xN makes it N time slower
+  12:tim1_it.c     ****   tim1_handle.Init.ClockDivision = 0U;
+  41              		.loc 1 12 0
+  42 0006 0025     		movs	r5, #0
+   9:tim1_it.c     ****   tim1_handle.Init.Period = 72000000;
+  43              		.loc 1 9 0
+  44 0008 2360     		str	r3, [r4]
+  10:tim1_it.c     ****   tim1_handle.Init.Period = 72000000;
+ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccb3vHih.s 			page 2
+
+
+  45              		.loc 1 10 0
+  46 000a 134B     		ldr	r3, .L7+8
+  13:tim1_it.c     ****   tim1_handle.Init.CounterMode = TIM_COUNTERMODE_UP;
+  14:tim1_it.c     ****   tim1_handle.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  15:tim1_it.c     ****   if (HAL_TIM_Base_Init(&tim1_handle)==HAL_ERROR)
+  47              		.loc 1 15 0
+  48 000c 2046     		mov	r0, r4
+  10:tim1_it.c     ****   tim1_handle.Init.Prescaler = 1;	// xN makes it N time slower
+  49              		.loc 1 10 0
+  50 000e E360     		str	r3, [r4, #12]
+  11:tim1_it.c     ****   tim1_handle.Init.ClockDivision = 0U;
+  51              		.loc 1 11 0
+  52 0010 0123     		movs	r3, #1
+  53 0012 6360     		str	r3, [r4, #4]
+  12:tim1_it.c     ****   tim1_handle.Init.CounterMode = TIM_COUNTERMODE_UP;
+  54              		.loc 1 12 0
+  55 0014 2561     		str	r5, [r4, #16]
+  13:tim1_it.c     ****   tim1_handle.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  56              		.loc 1 13 0
+  57 0016 A560     		str	r5, [r4, #8]
+  14:tim1_it.c     ****   if (HAL_TIM_Base_Init(&tim1_handle)==HAL_ERROR)
+  58              		.loc 1 14 0
+  59 0018 A561     		str	r5, [r4, #24]
+  60              		.loc 1 15 0
+  61 001a FFF7FEFF 		bl	HAL_TIM_Base_Init
+  62              	.LVL0:
+  63 001e 0128     		cmp	r0, #1
+  64 0020 14D0     		beq	.L2
+  16:tim1_it.c     ****      return HAL_ERROR;
+  17:tim1_it.c     **** 
+  18:tim1_it.c     ****   // setup and start TIM1's UPDATE interrupts
+  19:tim1_it.c     ****   HAL_NVIC_SetPriority(TIM1_UP_IRQn, 0, 0);
+  65              		.loc 1 19 0
+  66 0022 2A46     		mov	r2, r5
+  67 0024 2946     		mov	r1, r5
+  68 0026 1920     		movs	r0, #25
+  69 0028 FFF7FEFF 		bl	HAL_NVIC_SetPriority
+  70              	.LVL1:
+  20:tim1_it.c     ****   HAL_NVIC_EnableIRQ(TIM1_UP_IRQn);
+  71              		.loc 1 20 0
+  72 002c 1920     		movs	r0, #25
+  73 002e FFF7FEFF 		bl	HAL_NVIC_EnableIRQ
+  74              	.LVL2:
+  75              	.LBB2:
+  21:tim1_it.c     ****   __HAL_RCC_TIM1_CLK_ENABLE();
+  76              		.loc 1 21 0
+  77 0032 0A4B     		ldr	r3, .L7+12
+  78              	.LBE2:
+  22:tim1_it.c     ****   return HAL_TIM_Base_Start_IT(&tim1_handle);
+  79              		.loc 1 22 0
+  80 0034 2046     		mov	r0, r4
+  81              	.LBB3:
+  21:tim1_it.c     ****   __HAL_RCC_TIM1_CLK_ENABLE();
+  82              		.loc 1 21 0
+  83 0036 9A69     		ldr	r2, [r3, #24]
+  84 0038 42F40062 		orr	r2, r2, #2048
+  85 003c 9A61     		str	r2, [r3, #24]
+ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccb3vHih.s 			page 3
+
+
+  86 003e 9B69     		ldr	r3, [r3, #24]
+  87 0040 03F40063 		and	r3, r3, #2048
+  88 0044 0193     		str	r3, [sp, #4]
+  89 0046 019B     		ldr	r3, [sp, #4]
+  90              	.LBE3:
+  91              		.loc 1 22 0
+  92 0048 FFF7FEFF 		bl	HAL_TIM_Base_Start_IT
+  93              	.LVL3:
+  94              	.L2:
+  23:tim1_it.c     **** }
+  95              		.loc 1 23 0
+  96 004c 03B0     		add	sp, sp, #12
+  97              	.LCFI1:
+  98              		.cfi_def_cfa_offset 12
+  99              		@ sp needed
+ 100 004e 30BD     		pop	{r4, r5, pc}
+ 101              	.L8:
+ 102              		.align	2
+ 103              	.L7:
+ 104 0050 002C0140 		.word	1073818624
+ 105 0054 00000000 		.word	tim1_handle
+ 106 0058 00A24A04 		.word	72000000
+ 107 005c 00100240 		.word	1073876992
+ 108              		.cfi_endproc
+ 109              	.LFE64:
+ 111              		.section	.text.TIM1_UP_IRQHandler,"ax",%progbits
+ 112              		.align	1
+ 113              		.global	TIM1_UP_IRQHandler
+ 114              		.thumb
+ 115              		.thumb_func
+ 117              	TIM1_UP_IRQHandler:
+ 118              	.LFB65:
+  24:tim1_it.c     **** 
+  25:tim1_it.c     **** void TIM1_UP_IRQHandler(void)
+  26:tim1_it.c     **** {
+ 119              		.loc 1 26 0
+ 120              		.cfi_startproc
+ 121              		@ args = 0, pretend = 0, frame = 0
+ 122              		@ frame_needed = 0, uses_anonymous_args = 0
+ 123 0000 10B5     		push	{r4, lr}
+ 124              	.LCFI2:
+ 125              		.cfi_def_cfa_offset 8
+ 126              		.cfi_offset 4, -8
+ 127              		.cfi_offset 14, -4
+  27:tim1_it.c     ****   HAL_TIM_IRQHandler(&tim1_handle);
+ 128              		.loc 1 27 0
+ 129 0002 074C     		ldr	r4, .L10
+ 130 0004 2046     		mov	r0, r4
+ 131 0006 FFF7FEFF 		bl	HAL_TIM_IRQHandler
+ 132              	.LVL4:
+  28:tim1_it.c     ****   // begin user code
+  29:tim1_it.c     ****   HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13); // toggle PC13/LED
+ 133              		.loc 1 29 0
+ 134 000a 4FF40051 		mov	r1, #8192
+ 135 000e 0548     		ldr	r0, .L10+4
+ 136 0010 FFF7FEFF 		bl	HAL_GPIO_TogglePin
+ 137              	.LVL5:
+ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccb3vHih.s 			page 4
+
+
+  30:tim1_it.c     ****   // end user code
+  31:tim1_it.c     ****   __HAL_TIM_CLEAR_IT(&tim1_handle, TIM_IT_UPDATE);
+ 138              		.loc 1 31 0
+ 139 0014 2368     		ldr	r3, [r4]
+ 140 0016 6FF00102 		mvn	r2, #1
+ 141 001a 1A61     		str	r2, [r3, #16]
+ 142 001c 10BD     		pop	{r4, pc}
+ 143              	.L11:
+ 144 001e 00BF     		.align	2
+ 145              	.L10:
+ 146 0020 00000000 		.word	tim1_handle
+ 147 0024 00100140 		.word	1073811456
+ 148              		.cfi_endproc
+ 149              	.LFE65:
+ 151              		.comm	tim1_handle,64,4
+ 152              		.text
+ 153              	.Letext0:
+ 154              		.file 2 "/usr/local/Cellar/gcc-arm-none-eabi/20160928/arm-none-eabi/include/machine/_default_types
+ 155              		.file 3 "/usr/local/Cellar/gcc-arm-none-eabi/20160928/arm-none-eabi/include/sys/_stdint.h"
+ 156              		.file 4 "../Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xb.h"
+ 157              		.file 5 "../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_def.h"
+ 158              		.file 6 "../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_dma.h"
+ 159              		.file 7 "../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h"
+ 160              		.file 8 "../Drivers/CMSIS/Include/core_cm3.h"
+ 161              		.file 9 "../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_cortex.h"
+ 162              		.file 10 "../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_gpio.h"
+ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccb3vHih.s 			page 5
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 tim1_it.c
+/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccb3vHih.s:20     .text.TIM1_IT_Init:0000000000000000 $t
+/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccb3vHih.s:25     .text.TIM1_IT_Init:0000000000000000 TIM1_IT_Init
+/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccb3vHih.s:104    .text.TIM1_IT_Init:0000000000000050 $d
+                            *COM*:0000000000000040 tim1_handle
+/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccb3vHih.s:112    .text.TIM1_UP_IRQHandler:0000000000000000 $t
+/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccb3vHih.s:117    .text.TIM1_UP_IRQHandler:0000000000000000 TIM1_UP_IRQHandler
+/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccb3vHih.s:146    .text.TIM1_UP_IRQHandler:0000000000000020 $d
+                     .debug_frame:0000000000000010 $d
+
+UNDEFINED SYMBOLS
+HAL_TIM_Base_Init
+HAL_NVIC_SetPriority
+HAL_NVIC_EnableIRQ
+HAL_TIM_Base_Start_IT
+HAL_TIM_IRQHandler
+HAL_GPIO_TogglePin
