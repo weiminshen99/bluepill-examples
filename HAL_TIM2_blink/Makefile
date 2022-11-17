@@ -195,7 +195,7 @@ $(BUILD_DIR):
 clean:
 	-rm -fR $(BUILD_DIR)
 
-flash:
+flash:	$(BUILD_DIR)/$(TARGET).bin
 	st-flash --reset write $(BUILD_DIR)/$(TARGET).bin 0x8000000
 
 unlock:

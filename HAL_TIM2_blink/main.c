@@ -8,6 +8,8 @@
 TIM_HandleTypeDef       Tim2Handle;	// see HAL_tim2.c
 
 void SystemClock_Config(void);
+void PC13_led_toggle();
+
 
 // this is needed for HAL_Delay()
 void SysTick_Handler(void)	// this SysTick Timer is running at _MHZ
