@@ -14,7 +14,7 @@
 ######################################
 # target: change config.h to select MASTER or SLAVE
 ######################################
-TARGET = main
+TARGET = TEST
 #TARGET = master
 #TARGET = slave
 
@@ -60,9 +60,7 @@ $(DRIVERS_DIR)/Src/stm32f1xx_hal_rcc_ex.c \
 $(DRIVERS_DIR)/Src/stm32f1xx_hal_gpio.c \
 $(DRIVERS_DIR)/Src/stm32f1xx_hal_gpio_ex.c \
 main.c \
-tim1_it.c \
-tim2_it.c \
-tim2_pwm1.c \
+#stm32f1xx_hal_msp.c \
 #$(DRIVERS_DIR)/Src/stm32f1xx_hal_flash.c \
 #$(DRIVERS_DIR)/Src/stm32f1xx_hal_pwr.c \
 #$(DRIVERS_DIR)/Src/stm32f1xx_hal_adc_ex.c \
@@ -75,6 +73,7 @@ tim2_pwm1.c \
 # ASM sources
 ASM_SOURCES =  \
 startup_stm32f103xb.s
+#startup_stm32f103c8tx.s <= legacy
 #../blink1/bootstrap.s
 #startup_stm32f103xe.s
 
@@ -168,7 +167,7 @@ vpath %.c $(sort $(dir $(C_SOURCES)))
 OBJECTS += $(addprefix $(BUILD_DIR)/,$(notdir $(ASM_SOURCES:.s=.o)))
 vpath %.s $(sort $(dir $(ASM_SOURCES)))
 
-$(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR)
+$(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR) 
 	$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.c=.lst)) $< -o $@
 
 $(BUILD_DIR)/%.o: %.s Makefile | $(BUILD_DIR)

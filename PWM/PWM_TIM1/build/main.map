@@ -382,7 +382,7 @@ Discarded input sections
                 0x0000000000000000       0x30 build/stm32f1xx_hal_gpio_ex.o
  .debug_ranges  0x0000000000000000       0x20 build/stm32f1xx_hal_gpio_ex.o
  .debug_line    0x0000000000000000      0x1a7 build/stm32f1xx_hal_gpio_ex.o
- .debug_str     0x0000000000000000      0x281 build/stm32f1xx_hal_gpio_ex.o
+ .debug_str     0x0000000000000000      0x285 build/stm32f1xx_hal_gpio_ex.o
  .comment       0x0000000000000000       0x6f build/stm32f1xx_hal_gpio_ex.o
  .debug_frame   0x0000000000000000       0x40 build/stm32f1xx_hal_gpio_ex.o
  .ARM.attributes
@@ -962,27 +962,27 @@ OUTPUT(build/main.elf elf32-littlearm)
  .debug_line    0x0000000000002ce8      0x25e build/tim1_pwm.o
  .debug_line    0x0000000000002f46       0x72 build/startup_stm32f103xb.o
 
-.debug_str      0x0000000000000000     0x243f
- .debug_str     0x0000000000000000      0x2a6 build/system_stm32f1xx.o
-                                        0x306 (size before relaxing)
- .debug_str     0x00000000000002a6      0x560 build/stm32f1xx_hal.o
-                                        0x763 (size before relaxing)
- .debug_str     0x0000000000000806      0x283 build/stm32f1xx_hal_cortex.o
-                                        0x8d5 (size before relaxing)
- .debug_str     0x0000000000000a89      0xe6d build/stm32f1xx_hal_tim.o
-                                       0x10d7 (size before relaxing)
- .debug_str     0x00000000000018f6      0x41e build/stm32f1xx_hal_tim_ex.o
-                                        0xb10 (size before relaxing)
- .debug_str     0x0000000000001d14      0x362 build/stm32f1xx_hal_rcc.o
-                                        0x64c (size before relaxing)
- .debug_str     0x0000000000002076      0x12b build/stm32f1xx_hal_rcc_ex.o
-                                        0x3fd (size before relaxing)
- .debug_str     0x00000000000021a1      0x183 build/stm32f1xx_hal_gpio.o
-                                        0x430 (size before relaxing)
- .debug_str     0x0000000000002324       0xe8 build/main.o
-                                        0xc68 (size before relaxing)
- .debug_str     0x000000000000240c       0x33 build/tim1_pwm.o
-                                        0x8da (size before relaxing)
+.debug_str      0x0000000000000000     0x2443
+ .debug_str     0x0000000000000000      0x2aa build/system_stm32f1xx.o
+                                        0x30a (size before relaxing)
+ .debug_str     0x00000000000002aa      0x560 build/stm32f1xx_hal.o
+                                        0x767 (size before relaxing)
+ .debug_str     0x000000000000080a      0x283 build/stm32f1xx_hal_cortex.o
+                                        0x8d9 (size before relaxing)
+ .debug_str     0x0000000000000a8d      0xe6d build/stm32f1xx_hal_tim.o
+                                       0x10db (size before relaxing)
+ .debug_str     0x00000000000018fa      0x41e build/stm32f1xx_hal_tim_ex.o
+                                        0xb14 (size before relaxing)
+ .debug_str     0x0000000000001d18      0x362 build/stm32f1xx_hal_rcc.o
+                                        0x650 (size before relaxing)
+ .debug_str     0x000000000000207a      0x12b build/stm32f1xx_hal_rcc_ex.o
+                                        0x401 (size before relaxing)
+ .debug_str     0x00000000000021a5      0x183 build/stm32f1xx_hal_gpio.o
+                                        0x434 (size before relaxing)
+ .debug_str     0x0000000000002328       0xe8 build/main.o
+                                        0xc6c (size before relaxing)
+ .debug_str     0x0000000000002410       0x33 build/tim1_pwm.o
+                                        0x8de (size before relaxing)
 
 .comment        0x0000000000000000       0x6e
  .comment       0x0000000000000000       0x6e build/system_stm32f1xx.o

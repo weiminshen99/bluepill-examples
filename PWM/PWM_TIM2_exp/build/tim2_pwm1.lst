@@ -1,0 +1,329 @@
+ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccbjG5Sf.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.syntax unified
+  15              		.file	"tim2_pwm1.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.text.Error_Handler,"ax",%progbits
+  20              		.align	1
+  21              		.global	Error_Handler
+  22              		.thumb
+  23              		.thumb_func
+  25              	Error_Handler:
+  26              	.LFB64:
+  27              		.file 1 "tim2_pwm1.c"
+   1:tim2_pwm1.c   **** 
+   2:tim2_pwm1.c   **** #include "stm32f1xx_hal.h"
+   3:tim2_pwm1.c   **** 
+   4:tim2_pwm1.c   **** TIM_HandleTypeDef htim2;
+   5:tim2_pwm1.c   **** 
+   6:tim2_pwm1.c   **** void Error_Handler(void) { } // useful for gdb breakpoint
+  28              		.loc 1 6 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		@ link register save eliminated.
+  33 0000 7047     		bx	lr
+  34              		.cfi_endproc
+  35              	.LFE64:
+  37              		.section	.text.TIM2_PWM1_Init,"ax",%progbits
+  38              		.align	1
+  39              		.global	TIM2_PWM1_Init
+  40              		.thumb
+  41              		.thumb_func
+  43              	TIM2_PWM1_Init:
+  44              	.LFB65:
+   7:tim2_pwm1.c   **** 
+   8:tim2_pwm1.c   **** void TIM2_PWM1_Init(void)
+   9:tim2_pwm1.c   **** {
+  45              		.loc 1 9 0
+  46              		.cfi_startproc
+  47              		@ args = 0, pretend = 0, frame = 80
+  48              		@ frame_needed = 0, uses_anonymous_args = 0
+  49              		.loc 1 9 0
+  50 0000 70B5     		push	{r4, r5, r6, lr}
+  51              	.LCFI0:
+ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccbjG5Sf.s 			page 2
+
+
+  52              		.cfi_def_cfa_offset 16
+  53              		.cfi_offset 4, -16
+  54              		.cfi_offset 5, -12
+  55              		.cfi_offset 6, -8
+  56              		.cfi_offset 14, -4
+  10:tim2_pwm1.c   ****   // TIM2 GPIO Configuration
+  11:tim2_pwm1.c   ****   //   PA0-WKUP  <----> TIM2_CH1
+  12:tim2_pwm1.c   ****   // So we initiate GPIO PA0 for output PWM
+  13:tim2_pwm1.c   ****   GPIO_InitTypeDef GPIO_InitStruct;
+  14:tim2_pwm1.c   ****   GPIO_InitStruct.Pin = GPIO_PIN_0;
+  57              		.loc 1 14 0
+  58 0002 0123     		movs	r3, #1
+   9:tim2_pwm1.c   ****   // TIM2 GPIO Configuration
+  59              		.loc 1 9 0
+  60 0004 94B0     		sub	sp, sp, #80
+  61              	.LCFI1:
+  62              		.cfi_def_cfa_offset 96
+  63              	.LBB16:
+  15:tim2_pwm1.c   ****   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+  16:tim2_pwm1.c   ****   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  17:tim2_pwm1.c   ****   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+  18:tim2_pwm1.c   ****   __HAL_RCC_GPIOA_CLK_ENABLE();
+  64              		.loc 1 18 0
+  65 0006 2A4E     		ldr	r6, .L3
+  66              	.LBE16:
+  17:tim2_pwm1.c   ****   __HAL_RCC_GPIOA_CLK_ENABLE();
+  67              		.loc 1 17 0
+  68 0008 05A9     		add	r1, sp, #20
+  14:tim2_pwm1.c   ****   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+  69              		.loc 1 14 0
+  70 000a 0593     		str	r3, [sp, #20]
+  17:tim2_pwm1.c   ****   __HAL_RCC_GPIOA_CLK_ENABLE();
+  71              		.loc 1 17 0
+  72 000c 2948     		ldr	r0, .L3+4
+  15:tim2_pwm1.c   ****   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+  73              		.loc 1 15 0
+  74 000e 0223     		movs	r3, #2
+  75 0010 0693     		str	r3, [sp, #24]
+  16:tim2_pwm1.c   ****   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+  76              		.loc 1 16 0
+  77 0012 0893     		str	r3, [sp, #32]
+  17:tim2_pwm1.c   ****   __HAL_RCC_GPIOA_CLK_ENABLE();
+  78              		.loc 1 17 0
+  79 0014 FFF7FEFF 		bl	HAL_GPIO_Init
+  80              	.LVL0:
+  81              	.LBB17:
+  82              		.loc 1 18 0
+  83 0018 B369     		ldr	r3, [r6, #24]
+  84              	.LBE17:
+  19:tim2_pwm1.c   **** 
+  20:tim2_pwm1.c   ****   // Now, we initiate TIM2 for PWM on Channel 1
+  21:tim2_pwm1.c   ****   htim2.Instance = TIM2;
+  85              		.loc 1 21 0
+  86 001a 274C     		ldr	r4, .L3+8
+  87              	.LBB18:
+  18:tim2_pwm1.c   **** 
+  88              		.loc 1 18 0
+ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccbjG5Sf.s 			page 3
+
+
+  89 001c 43F00403 		orr	r3, r3, #4
+  90 0020 B361     		str	r3, [r6, #24]
+  91 0022 B369     		ldr	r3, [r6, #24]
+  92              	.LBE18:
+  22:tim2_pwm1.c   ****   htim2.Init.Prescaler = 0;
+  93              		.loc 1 22 0
+  94 0024 0025     		movs	r5, #0
+  95              	.LBB19:
+  18:tim2_pwm1.c   **** 
+  96              		.loc 1 18 0
+  97 0026 03F00403 		and	r3, r3, #4
+  98 002a 0193     		str	r3, [sp, #4]
+  99 002c 019B     		ldr	r3, [sp, #4]
+ 100              	.LBE19:
+ 101              		.loc 1 22 0
+ 102 002e 4FF08043 		mov	r3, #1073741824
+ 103 0032 84E82800 		stmia	r4, {r3, r5}
+  23:tim2_pwm1.c   ****   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
+  24:tim2_pwm1.c   ****   htim2.Init.Period = 65535;
+ 104              		.loc 1 24 0
+ 105 0036 4FF6FF73 		movw	r3, #65535
+  25:tim2_pwm1.c   ****   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  26:tim2_pwm1.c   ****   htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
+  27:tim2_pwm1.c   ****   if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
+ 106              		.loc 1 27 0
+ 107 003a 2046     		mov	r0, r4
+  24:tim2_pwm1.c   ****   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+ 108              		.loc 1 24 0
+ 109 003c E360     		str	r3, [r4, #12]
+  26:tim2_pwm1.c   ****   if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
+ 110              		.loc 1 26 0
+ 111 003e 8023     		movs	r3, #128
+ 112 0040 A361     		str	r3, [r4, #24]
+  23:tim2_pwm1.c   ****   htim2.Init.Period = 65535;
+ 113              		.loc 1 23 0
+ 114 0042 A560     		str	r5, [r4, #8]
+  25:tim2_pwm1.c   ****   htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
+ 115              		.loc 1 25 0
+ 116 0044 2561     		str	r5, [r4, #16]
+ 117              		.loc 1 27 0
+ 118 0046 FFF7FEFF 		bl	HAL_TIM_Base_Init
+ 119              	.LVL1:
+  28:tim2_pwm1.c   ****   { Error_Handler(); }
+  29:tim2_pwm1.c   **** 
+  30:tim2_pwm1.c   ****   TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+ 120              		.loc 1 30 0
+ 121 004a 1022     		movs	r2, #16
+ 122 004c 2946     		mov	r1, r5
+ 123 004e 09A8     		add	r0, sp, #36
+ 124 0050 FFF7FEFF 		bl	memset
+ 125              	.LVL2:
+  31:tim2_pwm1.c   ****   sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+ 126              		.loc 1 31 0
+ 127 0054 4FF48053 		mov	r3, #4096
+  32:tim2_pwm1.c   ****   if (HAL_TIM_ConfigClockSource(&htim2, &sClockSourceConfig) != HAL_OK)
+ 128              		.loc 1 32 0
+ 129 0058 09A9     		add	r1, sp, #36
+ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccbjG5Sf.s 			page 4
+
+
+ 130 005a 2046     		mov	r0, r4
+  31:tim2_pwm1.c   ****   sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+ 131              		.loc 1 31 0
+ 132 005c 0993     		str	r3, [sp, #36]
+ 133              		.loc 1 32 0
+ 134 005e FFF7FEFF 		bl	HAL_TIM_ConfigClockSource
+ 135              	.LVL3:
+  33:tim2_pwm1.c   ****   { Error_Handler(); }
+  34:tim2_pwm1.c   ****   if (HAL_TIM_PWM_Init(&htim2) != HAL_OK)
+ 136              		.loc 1 34 0
+ 137 0062 2046     		mov	r0, r4
+ 138 0064 FFF7FEFF 		bl	HAL_TIM_PWM_Init
+ 139              	.LVL4:
+  35:tim2_pwm1.c   ****   { Error_Handler(); }
+  36:tim2_pwm1.c   **** 
+  37:tim2_pwm1.c   ****   TIM_MasterConfigTypeDef sMasterConfig = {0};
+  38:tim2_pwm1.c   ****   sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  39:tim2_pwm1.c   ****   sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  40:tim2_pwm1.c   ****   if (HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig) != HAL_OK)
+ 140              		.loc 1 40 0
+ 141 0068 03A9     		add	r1, sp, #12
+ 142 006a 2046     		mov	r0, r4
+  37:tim2_pwm1.c   ****   sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+ 143              		.loc 1 37 0
+ 144 006c 0395     		str	r5, [sp, #12]
+ 145 006e 0495     		str	r5, [sp, #16]
+ 146              		.loc 1 40 0
+ 147 0070 FFF7FEFF 		bl	HAL_TIMEx_MasterConfigSynchronization
+ 148              	.LVL5:
+  41:tim2_pwm1.c   ****   { Error_Handler(); }
+  42:tim2_pwm1.c   **** 
+  43:tim2_pwm1.c   ****   TIM_OC_InitTypeDef sConfigOC = {0};
+ 149              		.loc 1 43 0
+ 150 0074 2946     		mov	r1, r5
+ 151 0076 1C22     		movs	r2, #28
+ 152 0078 0DA8     		add	r0, sp, #52
+ 153 007a FFF7FEFF 		bl	memset
+ 154              	.LVL6:
+  44:tim2_pwm1.c   ****   sConfigOC.OCMode = TIM_OCMODE_PWM1;
+ 155              		.loc 1 44 0
+ 156 007e 6023     		movs	r3, #96
+ 157 0080 0D93     		str	r3, [sp, #52]
+  45:tim2_pwm1.c   ****   sConfigOC.Pulse = 0;
+  46:tim2_pwm1.c   ****   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+  47:tim2_pwm1.c   ****   sConfigOC.OCFastMode = TIM_OCFAST_ENABLE;
+  48:tim2_pwm1.c   ****   if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_1)!=HAL_OK)
+ 158              		.loc 1 48 0
+ 159 0082 2A46     		mov	r2, r5
+  47:tim2_pwm1.c   ****   if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_1)!=HAL_OK)
+ 160              		.loc 1 47 0
+ 161 0084 0423     		movs	r3, #4
+ 162              		.loc 1 48 0
+ 163 0086 0DA9     		add	r1, sp, #52
+ 164 0088 2046     		mov	r0, r4
+  47:tim2_pwm1.c   ****   if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_1)!=HAL_OK)
+ 165              		.loc 1 47 0
+ 166 008a 1193     		str	r3, [sp, #68]
+ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccbjG5Sf.s 			page 5
+
+
+ 167              		.loc 1 48 0
+ 168 008c FFF7FEFF 		bl	HAL_TIM_PWM_ConfigChannel
+ 169              	.LVL7:
+ 170              	.LBB20:
+  49:tim2_pwm1.c   ****   { Error_Handler(); }
+  50:tim2_pwm1.c   **** 
+  51:tim2_pwm1.c   ****   __HAL_RCC_TIM2_CLK_ENABLE();	// start IM2's clock
+ 171              		.loc 1 51 0
+ 172 0090 F369     		ldr	r3, [r6, #28]
+ 173              	.LBE20:
+  52:tim2_pwm1.c   **** 
+  53:tim2_pwm1.c   ****   if (HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1)!=HAL_OK) // start PWM on Channel 1
+ 174              		.loc 1 53 0
+ 175 0092 2946     		mov	r1, r5
+ 176              	.LBB21:
+  51:tim2_pwm1.c   **** 
+ 177              		.loc 1 51 0
+ 178 0094 43F00103 		orr	r3, r3, #1
+ 179 0098 F361     		str	r3, [r6, #28]
+ 180 009a F369     		ldr	r3, [r6, #28]
+ 181              	.LBE21:
+ 182              		.loc 1 53 0
+ 183 009c 2046     		mov	r0, r4
+ 184              	.LBB22:
+  51:tim2_pwm1.c   **** 
+ 185              		.loc 1 51 0
+ 186 009e 03F00103 		and	r3, r3, #1
+ 187 00a2 0293     		str	r3, [sp, #8]
+ 188 00a4 029B     		ldr	r3, [sp, #8]
+ 189              	.LBE22:
+ 190              		.loc 1 53 0
+ 191 00a6 FFF7FEFF 		bl	HAL_TIM_PWM_Start
+ 192              	.LVL8:
+  54:tim2_pwm1.c   ****   { Error_Handler(); }
+  55:tim2_pwm1.c   **** }
+ 193              		.loc 1 55 0
+ 194 00aa 14B0     		add	sp, sp, #80
+ 195              	.LCFI2:
+ 196              		.cfi_def_cfa_offset 16
+ 197              		@ sp needed
+ 198 00ac 70BD     		pop	{r4, r5, r6, pc}
+ 199              	.L4:
+ 200 00ae 00BF     		.align	2
+ 201              	.L3:
+ 202 00b0 00100240 		.word	1073876992
+ 203 00b4 00080140 		.word	1073809408
+ 204 00b8 00000000 		.word	htim2
+ 205              		.cfi_endproc
+ 206              	.LFE65:
+ 208              		.comm	htim2,64,4
+ 209              		.text
+ 210              	.Letext0:
+ 211              		.file 2 "/usr/local/Cellar/gcc-arm-none-eabi/20160928/arm-none-eabi/include/machine/_default_types
+ 212              		.file 3 "/usr/local/Cellar/gcc-arm-none-eabi/20160928/arm-none-eabi/include/sys/_stdint.h"
+ 213              		.file 4 "../Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xb.h"
+ 214              		.file 5 "../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_def.h"
+ 215              		.file 6 "../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_gpio.h"
+ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccbjG5Sf.s 			page 6
+
+
+ 216              		.file 7 "../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_dma.h"
+ 217              		.file 8 "../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h"
+ 218              		.file 9 "../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h"
+ 219              		.file 10 "../Drivers/CMSIS/Include/core_cm3.h"
+ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccbjG5Sf.s 			page 7
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 tim2_pwm1.c
+/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccbjG5Sf.s:20     .text.Error_Handler:0000000000000000 $t
+/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccbjG5Sf.s:25     .text.Error_Handler:0000000000000000 Error_Handler
+/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccbjG5Sf.s:38     .text.TIM2_PWM1_Init:0000000000000000 $t
+/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccbjG5Sf.s:43     .text.TIM2_PWM1_Init:0000000000000000 TIM2_PWM1_Init
+/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccbjG5Sf.s:202    .text.TIM2_PWM1_Init:00000000000000b0 $d
+                            *COM*:0000000000000040 htim2
+                     .debug_frame:0000000000000010 $d
+
+UNDEFINED SYMBOLS
+HAL_GPIO_Init
+HAL_TIM_Base_Init
+memset
+HAL_TIM_ConfigClockSource
+HAL_TIM_PWM_Init
+HAL_TIMEx_MasterConfigSynchronization
+HAL_TIM_PWM_ConfigChannel
+HAL_TIM_PWM_Start

@@ -1,149 +1,168 @@
-// **************************************************************
-// Copyright (c) 2022 AARI Corporation. All rights reserved
-// Author Wei-Min Shen, 3-26-2022, 11-9-2022
-//
-// A demo for two timers to colaborate with each other:
-// 	Timer1's interrupt trun on  PC13/LED, and
-// 	Timer2's interrupt turn off PC13/LED
-//	To see these fast effects, gdb break on HAL_GPIO_TogglePin
-// ***************************************************************
 
 #include "stm32f1xx_hal.h"
 
-void TIM2_IT_Init();
-void TIM2_PWM1_Init();
+void Error_Handler(void);
 
-// this is needed for HAL_Delay()
-void SysTick_Handler(void)	// this SysTick Timer is running at _MHZ
+TIM_HandleTypeDef htim2;
+
+void SystemClock_Config(void);
+static void MX_GPIO_Init(void);
+static void MX_TIM2_Init(void);
+
+void SysTick_Handler(void)
 {
-  HAL_IncTick();                  	// at Hardware Abstraction Level (HAL), OR
-  //extern int32_t uwTick; uwTick++;	// equivelently, do it at the hardware level
+  HAL_IncTick();
 }
 
-//
-// System Clock Configuration
-//
-void SystemClock_Config(void) {
-
-  RCC_OscInitTypeDef RCC_OscInitStruct;
-  RCC_ClkInitTypeDef RCC_ClkInitStruct;
-  RCC_PeriphCLKInitTypeDef PeriphClkInit;
-
-  // Initializes the CPU, AHB and APB busses clocks
-  RCC_OscInitStruct.OscillatorType      = RCC_OSCILLATORTYPE_HSI;
-  RCC_OscInitStruct.HSIState            = RCC_HSI_ON;
-  RCC_OscInitStruct.HSICalibrationValue = 16;
-  RCC_OscInitStruct.PLL.PLLState        = RCC_PLL_ON;
-  RCC_OscInitStruct.PLL.PLLSource       = RCC_PLLSOURCE_HSI_DIV2;
-  RCC_OscInitStruct.PLL.PLLMUL          = RCC_PLL_MUL16;
-  HAL_RCC_OscConfig(&RCC_OscInitStruct);
-
-  // Initializes the CPU, AHB and APB busses clocks
-  RCC_ClkInitStruct.ClockType      = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
-  RCC_ClkInitStruct.SYSCLKSource   = RCC_SYSCLKSOURCE_PLLCLK;
-  RCC_ClkInitStruct.AHBCLKDivider  = RCC_SYSCLK_DIV1;
-  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
-  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
-
-  HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2);
-
-  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC;
-  PeriphClkInit.AdcClockSelection    = RCC_ADCPCLK2_DIV8;  // 8 MHz
-  HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit);
-
-  // Configure the Systick interrupt time
-  HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq() / 1000);
-
-  // Configure the Systick
-  HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
-
-  // SysTick_IRQn interrupt configuration
-  HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
-}
-
-//===========================
-//	PC13 LED
-//===========================
-
-volatile uint32_t* GPIOC_BSRR = (volatile uint32_t*) 0x40011010; // Port C
-volatile uint32_t led_state = 0;
-
-void PC13_led_init(void)
+int main(void)
 {
-  volatile uint32_t* RCC_APB2ENR = (volatile uint32_t*) 0x40021018;     // RCC
-  volatile uint32_t* GPIOC_CRH =  (volatile uint32_t*) 0x40011004;      // Port C
-  *RCC_APB2ENR |= (0b1<<4);     // set bit4=1 to enable Port C
-  *GPIOC_CRH &= ~(0b1111<<20);  // clear PC13, bits 23..20
-  *GPIOC_CRH  |=  (0b0110<<20);  // set the bits to 0110 for Mode Output 2
-  *GPIOC_BSRR |= ((uint32_t) 1 << (13 + 0)); // turn off PC13/LED
-}
-
-void PC13_led_toggle(void)
-{
-  if (led_state) { // make PC13/LED OFF
-        *GPIOC_BSRR |= ((uint32_t) 1 << (13 + 0));
-        led_state = 0;
-  } else { // make it ON
-        *GPIOC_BSRR |= ((uint32_t) 1 << (13 + 16));
-        led_state = 1;
-  }
-}
+    int32_t CH1_DC = 0;
+    HAL_Init();
+    SystemClock_Config();
 
 
-// ======================
-int main(void) {
+    __HAL_RCC_AFIO_CLK_ENABLE();
+    __HAL_RCC_PWR_CLK_ENABLE();
+    __HAL_RCC_TIM2_CLK_ENABLE();
 
-  HAL_Init();
+//    __HAL_AFIO_REMAP_SWJ_DISABLE();
 
-  SystemClock_Config();
 
-/*
-  __HAL_RCC_AFIO_CLK_ENABLE();
+    MX_TIM2_Init();
+    MX_GPIO_Init();
+    HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
 
-  HAL_NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);
-  HAL_NVIC_SetPriority(MemoryManagement_IRQn, 0, 0);
-  HAL_NVIC_SetPriority(BusFault_IRQn, 0, 0);
-  HAL_NVIC_SetPriority(UsageFault_IRQn, 0, 0);
-  HAL_NVIC_SetPriority(SVCall_IRQn, 0, 0);
-  HAL_NVIC_SetPriority(DebugMonitor_IRQn, 0, 0);
-  HAL_NVIC_SetPriority(PendSV_IRQn, 0, 0);
-  HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
-*/
-
-//  TIM1_Init();
-
-//  TIM2_IT_Init();
-
-  TIM2_PWM1_Init();
-
-  if (HAL_InitTick(0) != HAL_ERROR)
-  {
-	// means the timers are started successfully
-  }
-
-  PC13_led_init();	// needed for toggle PC13/LED
-
-  TIM2->CCR1 = 1000;
-
-  while(1)
+    while (1)
     {
-/*    while(CH1_DC < 65535)
-      {
-	TIM2->CCR1 = CH1_DC;
-    	CH1_DC += 70;
-    	HAL_Delay(1);
-      }
-    while(CH1_DC > 0)
+    	while(CH1_DC < 65535)
+    	{
+    		TIM2->CCR1 = CH1_DC;
+    		CH1_DC += 70;
+    		HAL_Delay(1);
+    	}
+    	//CH1_DC = 65535;
+    	while(CH1_DC > 0)
     	{
     	    TIM2->CCR1 = CH1_DC;
     	    CH1_DC -= 70;
     	    HAL_Delay(1);
     	}
-*/
-	HAL_Delay(500);	// it is about 500 ms
-	//PC13_led_toggle();
-	HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
-
-	TIM2->CCR1 = ( TIM2->CCR1==0 ? 1000 : 0 ); // toggle CCR1
+    	//CH1_DC = 0;
     }
+}
+
+
+
+/**
+  * @brief System Clock Configuration
+  * @retval None
+  */
+void SystemClock_Config(void)
+{
+  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
+  RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+
+  /** Initializes the CPU, AHB and APB busses clocks
+  */
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+  RCC_OscInitStruct.HSEPredivValue = RCC_HSE_PREDIV_DIV1;
+  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
+  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+  RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL9;
+  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Initializes the CPU, AHB and APB busses clocks
+  */
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
+                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
+  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
+  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
+
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+}
+
+/**
+  * @brief TIM2 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM2_Init(void)
+{
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+  TIM_OC_InitTypeDef sConfigOC = {0};
+
+  htim2.Instance = TIM2;
+  htim2.Init.Prescaler = 0;
+  htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim2.Init.Period = 65535;
+  htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
+  if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim2, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  if (HAL_TIM_PWM_Init(&htim2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sConfigOC.OCMode = TIM_OCMODE_PWM1;
+  sConfigOC.Pulse = 0;
+  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+  sConfigOC.OCFastMode = TIM_OCFAST_ENABLE;
+  if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+}
+
+/**
+  * @brief GPIO Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_GPIO_Init(void)
+{
+    /* GPIO Ports Clock Enable */
+    __HAL_RCC_GPIOA_CLK_ENABLE();
+    /**TIM2 GPIO Configuration
+    PA0-WKUP     ------> TIM2_CH1
+    */
+    GPIO_InitTypeDef GPIO_InitStruct = {0};
+    GPIO_InitStruct.Pin = GPIO_PIN_0;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+}
+
+/* USER CODE BEGIN 4 */
+
+/* USER CODE END 4 */
+
+/**
+  * @brief  This function is executed in case of error occurrence.
+  * @retval None
+  */
+void Error_Handler(void)
+{
 }

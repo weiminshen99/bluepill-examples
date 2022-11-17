@@ -1,4 +1,4 @@
-ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s 			page 1
+ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMAGOPV.s 			page 1
 
 
    1              		.syntax unified
@@ -58,7 +58,7 @@ ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s 			page 1
   37              	.LFE64:
   39              		.section	.text.SystemClock_Config,"ax",%progbits
   40              		.align	1
-ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s 			page 2
+ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMAGOPV.s 			page 2
 
 
   41              		.global	SystemClock_Config
@@ -118,7 +118,7 @@ ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s 			page 1
   40:main.c        ****   HAL_RCC_OscConfig(&RCC_OscInitStruct);
   73              		.loc 1 40 0
   74 0010 0AA8     		add	r0, sp, #40
-ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s 			page 3
+ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMAGOPV.s 			page 3
 
 
   39:main.c        ****   RCC_OscInitStruct.PLL.PLLMUL          = RCC_PLL_MUL16;
@@ -178,7 +178,7 @@ ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s 			page 1
  108 003a 4FF44043 		mov	r3, #49152
   53:main.c        ****   HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit);
  109              		.loc 1 53 0
-ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s 			page 4
+ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMAGOPV.s 			page 4
 
 
  110 003e 01A8     		add	r0, sp, #4
@@ -238,7 +238,7 @@ ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s 			page 1
   66:main.c        **** //	PC13 LED
   67:main.c        **** //===========================
   68:main.c        **** 
-ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s 			page 5
+ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMAGOPV.s 			page 5
 
 
   69:main.c        **** volatile uint32_t* GPIOC_BSRR = (volatile uint32_t*) 0x40011010; // Port C
@@ -298,7 +298,7 @@ ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s 			page 1
   81:main.c        **** 
   82:main.c        **** void PC13_led_toggle(void)
   83:main.c        **** {
-ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s 			page 6
+ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMAGOPV.s 			page 6
 
 
  196              		.loc 1 83 0
@@ -358,7 +358,7 @@ ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s 			page 1
   95:main.c        **** // ======= TIM2 ====================================================
   96:main.c        **** 
   97:main.c        **** TIM_HandleTypeDef tim2_handle;
-ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s 			page 7
+ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMAGOPV.s 			page 7
 
 
   98:main.c        **** 
@@ -418,7 +418,7 @@ ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s 			page 1
  111:main.c        ****   // Configure the TIM2 IRQ priority
  112:main.c        ****   HAL_NVIC_SetPriority(TIM2_IRQn, 0, 0);
  277              		.loc 1 112 0
-ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s 			page 8
+ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMAGOPV.s 			page 8
 
 
  278 0024 2A46     		mov	r2, r5
@@ -478,7 +478,7 @@ ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s 			page 1
  325              		.thumb
  326              		.thumb_func
  328              	TIM2_IRQHandler:
-ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s 			page 9
+ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMAGOPV.s 			page 9
 
 
  329              	.LFB69:
@@ -538,7 +538,7 @@ ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s 			page 1
  135:main.c        **** HAL_StatusTypeDef TIM1_Init()
  136:main.c        **** {
  370              		.loc 1 136 0
-ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s 			page 10
+ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMAGOPV.s 			page 10
 
 
  371              		.cfi_startproc
@@ -598,7 +598,7 @@ ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s 			page 1
  148:main.c        ****   HAL_NVIC_SetPriority(TIM1_UP_IRQn, 0, 0);
  407              		.loc 1 148 0
  408 0022 2A46     		mov	r2, r5
-ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s 			page 11
+ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMAGOPV.s 			page 11
 
 
  409 0024 2946     		mov	r1, r5
@@ -658,7 +658,7 @@ ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s 			page 1
  460              	.LFB71:
  153:main.c        **** 
  154:main.c        **** void TIM1_UP_IRQHandler(void)
-ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s 			page 12
+ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMAGOPV.s 			page 12
 
 
  155:main.c        **** {
@@ -718,7 +718,7 @@ ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s 			page 1
  505              		@ frame_needed = 0, uses_anonymous_args = 0
  506 0000 08B5     		push	{r3, lr}
  507              	.LCFI9:
-ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s 			page 13
+ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMAGOPV.s 			page 13
 
 
  508              		.cfi_def_cfa_offset 8
@@ -778,7 +778,7 @@ ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s 			page 1
  198:main.c        **** 
  199:main.c        ****   while(1)
  200:main.c        ****   {
-ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s 			page 14
+ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMAGOPV.s 			page 14
 
 
  201:main.c        **** /*
@@ -838,48 +838,48 @@ ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s 			page 1
  574              		.file 8 "../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_dma.h"
  575              		.file 9 "../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h"
  576              		.file 10 "../Drivers/CMSIS/Include/core_cm3.h"
-ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s 			page 15
+ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMAGOPV.s 			page 15
 
 
  577              		.file 11 "../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h"
  578              		.file 12 "../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_cortex.h"
  579              		.file 13 "../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_gpio.h"
-ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s 			page 16
+ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMAGOPV.s 			page 16
 
 
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 main.c
-/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s:20     .text.SysTick_Handler:0000000000000000 $t
-/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s:25     .text.SysTick_Handler:0000000000000000 SysTick_Handler
-/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s:40     .text.SystemClock_Config:0000000000000000 $t
-/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s:45     .text.SystemClock_Config:0000000000000000 SystemClock_Config
-/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s:145    .text.PC13_led_init:0000000000000000 $t
-/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s:150    .text.PC13_led_init:0000000000000000 PC13_led_init
-/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s:182    .text.PC13_led_init:000000000000002c $d
-/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s:189    .text.PC13_led_toggle:0000000000000000 $t
-/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s:194    .text.PC13_led_toggle:0000000000000000 PC13_led_toggle
-/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s:228    .text.PC13_led_toggle:0000000000000028 $d
-/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s:234    .text.TIM2_Init:0000000000000000 $t
-/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s:239    .text.TIM2_Init:0000000000000000 TIM2_Init
-/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s:316    .text.TIM2_Init:0000000000000054 $d
+/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMAGOPV.s:20     .text.SysTick_Handler:0000000000000000 $t
+/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMAGOPV.s:25     .text.SysTick_Handler:0000000000000000 SysTick_Handler
+/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMAGOPV.s:40     .text.SystemClock_Config:0000000000000000 $t
+/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMAGOPV.s:45     .text.SystemClock_Config:0000000000000000 SystemClock_Config
+/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMAGOPV.s:145    .text.PC13_led_init:0000000000000000 $t
+/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMAGOPV.s:150    .text.PC13_led_init:0000000000000000 PC13_led_init
+/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMAGOPV.s:182    .text.PC13_led_init:000000000000002c $d
+/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMAGOPV.s:189    .text.PC13_led_toggle:0000000000000000 $t
+/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMAGOPV.s:194    .text.PC13_led_toggle:0000000000000000 PC13_led_toggle
+/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMAGOPV.s:228    .text.PC13_led_toggle:0000000000000028 $d
+/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMAGOPV.s:234    .text.TIM2_Init:0000000000000000 $t
+/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMAGOPV.s:239    .text.TIM2_Init:0000000000000000 TIM2_Init
+/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMAGOPV.s:316    .text.TIM2_Init:0000000000000054 $d
                             *COM*:0000000000000040 tim2_handle
-/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s:323    .text.TIM2_IRQHandler:0000000000000000 $t
-/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s:328    .text.TIM2_IRQHandler:0000000000000000 TIM2_IRQHandler
-/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s:357    .text.TIM2_IRQHandler:0000000000000020 $d
-/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s:363    .text.TIM1_Init:0000000000000000 $t
-/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s:368    .text.TIM1_Init:0000000000000000 TIM1_Init
-/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s:446    .text.TIM1_Init:0000000000000050 $d
+/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMAGOPV.s:323    .text.TIM2_IRQHandler:0000000000000000 $t
+/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMAGOPV.s:328    .text.TIM2_IRQHandler:0000000000000000 TIM2_IRQHandler
+/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMAGOPV.s:357    .text.TIM2_IRQHandler:0000000000000020 $d
+/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMAGOPV.s:363    .text.TIM1_Init:0000000000000000 $t
+/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMAGOPV.s:368    .text.TIM1_Init:0000000000000000 TIM1_Init
+/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMAGOPV.s:446    .text.TIM1_Init:0000000000000050 $d
                             *COM*:0000000000000040 tim1_handle
-/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s:454    .text.TIM1_UP_IRQHandler:0000000000000000 $t
-/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s:459    .text.TIM1_UP_IRQHandler:0000000000000000 TIM1_UP_IRQHandler
-/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s:488    .text.TIM1_UP_IRQHandler:0000000000000020 $d
-/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s:494    .text.startup.main:0000000000000000 $t
-/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s:499    .text.startup.main:0000000000000000 main
-/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s:544    .text.startup.main:0000000000000030 $d
-/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s:557    .bss.led_state:0000000000000000 led_state
-/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s:564    .data.GPIOC_BSRR:0000000000000000 GPIOC_BSRR
-/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s:553    .bss.led_state:0000000000000000 $d
-/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccz0agCO.s:560    .data.GPIOC_BSRR:0000000000000000 $d
+/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMAGOPV.s:454    .text.TIM1_UP_IRQHandler:0000000000000000 $t
+/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMAGOPV.s:459    .text.TIM1_UP_IRQHandler:0000000000000000 TIM1_UP_IRQHandler
+/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMAGOPV.s:488    .text.TIM1_UP_IRQHandler:0000000000000020 $d
+/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMAGOPV.s:494    .text.startup.main:0000000000000000 $t
+/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMAGOPV.s:499    .text.startup.main:0000000000000000 main
+/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMAGOPV.s:544    .text.startup.main:0000000000000030 $d
+/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMAGOPV.s:557    .bss.led_state:0000000000000000 led_state
+/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMAGOPV.s:564    .data.GPIOC_BSRR:0000000000000000 GPIOC_BSRR
+/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMAGOPV.s:553    .bss.led_state:0000000000000000 $d
+/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMAGOPV.s:560    .data.GPIOC_BSRR:0000000000000000 $d
                      .debug_frame:0000000000000010 $d
 
 UNDEFINED SYMBOLS

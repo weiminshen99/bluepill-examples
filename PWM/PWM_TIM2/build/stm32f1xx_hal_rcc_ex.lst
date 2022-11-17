@@ -1,4 +1,4 @@
-ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccjzVgYO.s 			page 1
+ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMEdLl5.s 			page 1
 
 
    1              		.syntax unified
@@ -58,7 +58,7 @@ ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccjzVgYO.s 			page 1
   29:../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c ****   * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
   30:../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c ****   * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
   31:../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c ****   * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccjzVgYO.s 			page 2
+ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMEdLl5.s 			page 2
 
 
   32:../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c ****   * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
@@ -118,7 +118,7 @@ ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccjzVgYO.s 			page 1
   86:../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c ****                 ##### Extended Peripheral Control functions  #####
   87:../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c ****  ===============================================================================  
   88:../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c ****     [..]
-ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccjzVgYO.s 			page 3
+ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMEdLl5.s 			page 3
 
 
   89:../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c ****     This subsection provides a set of functions allowing to control the RCC Clocks 
@@ -178,7 +178,7 @@ ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccjzVgYO.s 			page 1
   40              		.cfi_offset 5, -20
   41              		.cfi_offset 6, -16
   42              		.cfi_offset 7, -12
-ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccjzVgYO.s 			page 4
+ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMEdLl5.s 			page 4
 
 
   43              		.cfi_offset 8, -8
@@ -238,7 +238,7 @@ ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccjzVgYO.s 			page 1
  143:../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c ****     }
  144:../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c ****     
  145:../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c ****     if(HAL_IS_BIT_CLR(PWR->CR, PWR_CR_DBP))
-ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccjzVgYO.s 			page 5
+ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMEdLl5.s 			page 5
 
 
   81              		.loc 1 145 0
@@ -298,7 +298,7 @@ ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccjzVgYO.s 			page 1
  155:../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c ****         {
  113              		.loc 1 155 0
  114 0054 FFF7FEFF 		bl	HAL_GetTick
-ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccjzVgYO.s 			page 6
+ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMEdLl5.s 			page 6
 
 
  115              	.LVL11:
@@ -358,7 +358,7 @@ ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccjzVgYO.s 			page 1
  193:../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c ****     if(pwrclkchanged == SET)
  140              		.loc 1 193 0
  141 007c EFB1     		cbz	r7, .L3
-ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccjzVgYO.s 			page 7
+ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMEdLl5.s 			page 7
 
 
  194:../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c ****     {
@@ -418,7 +418,7 @@ ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccjzVgYO.s 			page 1
  183 00b2 801B     		subs	r0, r0, r6
  184 00b4 4045     		cmp	r0, r8
  185 00b6 F7D9     		bls	.L14
-ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccjzVgYO.s 			page 8
+ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMEdLl5.s 			page 8
 
 
  186 00b8 D2E7     		b	.L15
@@ -478,7 +478,7 @@ ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccjzVgYO.s 			page 1
  234:../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c ****     /* Update flag to indicate that PLL I2S should be active */
  235:../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c ****     pllactive = 1;
  236:../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c ****   }
-ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccjzVgYO.s 			page 9
+ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMEdLl5.s 			page 9
 
 
  237:../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c **** 
@@ -538,7 +538,7 @@ ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccjzVgYO.s 			page 1
  291:../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c ****   /*------------------------------ USB clock Configuration ------------------*/ 
  292:../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c ****   if(((PeriphClkInit->PeriphClockSelection) & RCC_PERIPHCLK_USB) == RCC_PERIPHCLK_USB)
  202              		.loc 1 292 0
-ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccjzVgYO.s 			page 10
+ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMEdLl5.s 			page 10
 
 
  203 00ce 10F01000 		ands	r0, r0, #16
@@ -598,7 +598,7 @@ ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccjzVgYO.s 			page 1
  311:../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c ****   */
  312:../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c **** void HAL_RCCEx_GetPeriphCLKConfig(RCC_PeriphCLKInitTypeDef  *PeriphClkInit)
  313:../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c **** {
-ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccjzVgYO.s 			page 11
+ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMEdLl5.s 			page 11
 
 
  240              		.loc 1 313 0
@@ -658,7 +658,7 @@ ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccjzVgYO.s 			page 1
  349:../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c **** 
  350:../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c **** #if defined(STM32F102x6) || defined(STM32F102xB) || defined(STM32F103x6)\
  351:../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c ****  || defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG)\
-ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccjzVgYO.s 			page 12
+ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMEdLl5.s 			page 12
 
 
  352:../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c ****  || defined(STM32F105xC) || defined(STM32F107xC)
@@ -718,7 +718,7 @@ ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccjzVgYO.s 			page 1
  385:../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c ****   *            @arg @ref RCC_PERIPHCLK_USB  USB peripheral clock
  386:../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c ****   @endif
  387:../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c ****   @if STM32F107xC
-ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccjzVgYO.s 			page 13
+ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMEdLl5.s 			page 13
 
 
  388:../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c ****   *            @arg @ref RCC_PERIPHCLK_I2S2 I2S2 peripheral clock
@@ -778,7 +778,7 @@ ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccjzVgYO.s 			page 1
  305              		.cfi_def_cfa_offset 48
  306              		.loc 1 416 0
  307 000e 02AD     		add	r5, sp, #8
-ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccjzVgYO.s 			page 14
+ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMEdLl5.s 			page 14
 
 
  308              	.LVL28:
@@ -838,7 +838,7 @@ ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccjzVgYO.s 			page 1
  340 003c 10F08070 		ands	r0, r0, #16777216
  341 0040 48D0     		beq	.L36
  438:../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c ****       {
-ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccjzVgYO.s 			page 15
+ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMEdLl5.s 			page 15
 
 
  439:../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c ****         pllmul = aPLLMULFactorTable[(uint32_t)(temp_reg & RCC_CFGR_PLLMULL) >> RCC_CFGR_PLLMULL_Pos
@@ -898,7 +898,7 @@ ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccjzVgYO.s 			page 1
  358              		.loc 1 474 0
  359 0058 44BF     		itt	mi
  360 005a 11F8140C 		ldrbmi	r0, [r1, #-20]	@ zero_extendqisi2
-ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccjzVgYO.s 			page 16
+ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMEdLl5.s 			page 16
 
 
  361 005e 2049     		ldrmi	r1, .L55+8
@@ -958,7 +958,7 @@ ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccjzVgYO.s 			page 1
  381 0078 25E0     		b	.L52
  382              	.LVL36:
  383              	.L54:
-ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccjzVgYO.s 			page 17
+ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMEdLl5.s 			page 17
 
 
  508:../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c ****         }
@@ -1018,7 +1018,7 @@ ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccjzVgYO.s 			page 1
  562:../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c **** #endif /* STM32F103xE || STM32F103xG */
  563:../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c ****       break;
  564:../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c ****     }
-ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccjzVgYO.s 			page 18
+ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMEdLl5.s 			page 18
 
 
  565:../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c **** #endif /* STM32F103xE || STM32F103xG || STM32F105xC || STM32F107xC */
@@ -1078,7 +1078,7 @@ ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccjzVgYO.s 			page 1
  417 00b2 0020     		moveq	r0, #0
  418 00b4 0EE0     		b	.L36
  419              	.LVL39:
-ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccjzVgYO.s 			page 19
+ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMEdLl5.s 			page 19
 
 
  420              	.L37:
@@ -1138,7 +1138,7 @@ ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccjzVgYO.s 			page 1
  452              	.LVL46:
  453              	.L56:
  454              		.align	2
-ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccjzVgYO.s 			page 20
+ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMEdLl5.s 			page 20
 
 
  455              	.L55:
@@ -1181,20 +1181,20 @@ ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccjzVgYO.s 			page 1
  493              		.file 8 "../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h"
  494              		.file 9 "../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc.h"
  495              		.file 10 "../Drivers/CMSIS/Include/core_cm3.h"
-ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccjzVgYO.s 			page 21
+ARM GAS  /var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMEdLl5.s 			page 21
 
 
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 stm32f1xx_hal_rcc_ex.c
-/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccjzVgYO.s:20     .text.HAL_RCCEx_PeriphCLKConfig:0000000000000000 $t
-/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccjzVgYO.s:25     .text.HAL_RCCEx_PeriphCLKConfig:0000000000000000 HAL_RCCEx_PeriphCLKConfig
-/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccjzVgYO.s:226    .text.HAL_RCCEx_PeriphCLKConfig:00000000000000ec $d
-/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccjzVgYO.s:233    .text.HAL_RCCEx_GetPeriphCLKConfig:0000000000000000 $t
-/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccjzVgYO.s:238    .text.HAL_RCCEx_GetPeriphCLKConfig:0000000000000000 HAL_RCCEx_GetPeriphCLKConfig
-/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccjzVgYO.s:270    .text.HAL_RCCEx_GetPeriphCLKConfig:0000000000000020 $d
-/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccjzVgYO.s:275    .text.HAL_RCCEx_GetPeriphCLKFreq:0000000000000000 $t
-/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccjzVgYO.s:280    .text.HAL_RCCEx_GetPeriphCLKFreq:0000000000000000 HAL_RCCEx_GetPeriphCLKFreq
-/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccjzVgYO.s:456    .text.HAL_RCCEx_GetPeriphCLKFreq:00000000000000d8 $d
+/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMEdLl5.s:20     .text.HAL_RCCEx_PeriphCLKConfig:0000000000000000 $t
+/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMEdLl5.s:25     .text.HAL_RCCEx_PeriphCLKConfig:0000000000000000 HAL_RCCEx_PeriphCLKConfig
+/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMEdLl5.s:226    .text.HAL_RCCEx_PeriphCLKConfig:00000000000000ec $d
+/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMEdLl5.s:233    .text.HAL_RCCEx_GetPeriphCLKConfig:0000000000000000 $t
+/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMEdLl5.s:238    .text.HAL_RCCEx_GetPeriphCLKConfig:0000000000000000 HAL_RCCEx_GetPeriphCLKConfig
+/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMEdLl5.s:270    .text.HAL_RCCEx_GetPeriphCLKConfig:0000000000000020 $d
+/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMEdLl5.s:275    .text.HAL_RCCEx_GetPeriphCLKFreq:0000000000000000 $t
+/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMEdLl5.s:280    .text.HAL_RCCEx_GetPeriphCLKFreq:0000000000000000 HAL_RCCEx_GetPeriphCLKFreq
+/var/folders/jn/652hmfdj2m99syhs9p34dk640000gq/T//ccMEdLl5.s:456    .text.HAL_RCCEx_GetPeriphCLKFreq:00000000000000d8 $d
                      .debug_frame:0000000000000010 $d
 
 UNDEFINED SYMBOLS
