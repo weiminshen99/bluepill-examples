@@ -25,12 +25,8 @@ int main(void)
     __HAL_RCC_PWR_CLK_ENABLE();
     __HAL_RCC_TIM2_CLK_ENABLE();
 
-//    __HAL_AFIO_REMAP_SWJ_DISABLE();
-
-
     MX_TIM2_Init();
     MX_GPIO_Init();
-    HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
 
     while (1)
     {
@@ -134,6 +130,8 @@ static void MX_TIM2_Init(void)
   {
     Error_Handler();
   }
+
+  HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
 }
 
 /**
