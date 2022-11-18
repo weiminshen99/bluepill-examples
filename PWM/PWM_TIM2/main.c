@@ -1,9 +1,9 @@
 
 #include "stm32f1xx_hal.h"
-
-void Error_Handler(void);
+#include "tim1_pwm1.h"
 
 TIM_HandleTypeDef htim2;
+TIM_HandleTypeDef tim1_handle;
 
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
@@ -20,18 +20,21 @@ int main(void)
     HAL_Init();
     SystemClock_Config();
 
-
     __HAL_RCC_AFIO_CLK_ENABLE();
     __HAL_RCC_PWR_CLK_ENABLE();
-    __HAL_RCC_TIM2_CLK_ENABLE();
+    __HAL_RCC_TIM1_CLK_ENABLE(); // this must be in the main(). Why?
+    __HAL_RCC_TIM2_CLK_ENABLE(); // this must be in the main(). Why?
 
     MX_TIM2_Init();
     MX_GPIO_Init();
+    TIM1_PWM1_Init();
+    TIM1_PWM1_GPIO_Init();
 
     while (1)
     {
     	while(CH1_DC < 65535)
     	{
+    		TIM1->CCR1 = CH1_DC;
     		TIM2->CCR1 = CH1_DC;
     		CH1_DC += 70;
     		HAL_Delay(1);
@@ -39,14 +42,14 @@ int main(void)
     	//CH1_DC = 65535;
     	while(CH1_DC > 0)
     	{
-    	    TIM2->CCR1 = CH1_DC;
-    	    CH1_DC -= 70;
-    	    HAL_Delay(1);
+    		TIM1->CCR1 = CH1_DC;
+    	    	TIM2->CCR1 = CH1_DC;
+    	    	CH1_DC -= 70;
+    	    	HAL_Delay(1);
     	}
     	//CH1_DC = 0;
     }
 }
-
 
 
 /**
@@ -151,16 +154,4 @@ static void MX_GPIO_Init(void)
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-}
-
-/* USER CODE BEGIN 4 */
-
-/* USER CODE END 4 */
-
-/**
-  * @brief  This function is executed in case of error occurrence.
-  * @retval None
-  */
-void Error_Handler(void)
-{
 }
