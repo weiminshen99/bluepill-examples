@@ -9,11 +9,10 @@
 // ***************************************************************
 
 #include "stm32f1xx_hal.h"
+#include "main.h"
 #include "tim1_pwm1.h"
 
-void Error_Handler() { }
-
-extern TIM_HandleTypeDef tim1_handle;
+TIM_HandleTypeDef tim1_handle;
 
 void TIM1_PWM1_Init()
 {
