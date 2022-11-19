@@ -1,5 +1,10 @@
-UPDATE: I added a few more examples in the collection.  -- WMS. 3-29-2022
 
+==============================
+11-19-2022: WMS added the PWM code for working examples
+
+3-29-2022: WMS added a few more examples in the collection.  -- WMS. 3-29-2022
+
+==============================
 This is a collection of things I have done pertaining to the STM32F103
 microcontroller.  I program using the C language and Makefiles, so this
 is a collection of "on the bare metal" style stuff.  By and large it is
