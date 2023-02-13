@@ -2,7 +2,7 @@
 THis respoository does the PWM generation using HAL programming:
 
 TIM1 ------> Channel-1 -----> PA8  ---> PWM (with deadtime)
-       |---> Channel-1N ----> PB13 ---> PWM (with deadtime)
+TIM1 -----> Channel-1N ----> PB13 ---> PWM (with deadtime)
 
 
 TIM2 ------> Channel-1 -----> PA0  ---> PWM
