@@ -70,7 +70,7 @@ void TIM1_and_Pins_Init(void)
   HAL_TIMEx_PWMN_Start(&htim_right, TIM_CHANNEL_3);
 
   __HAL_TIM_ENABLE(&htim_right);
-  __HAL_RCC_TIM1_CLK_ENABLE();
+//  __HAL_RCC_TIM1_CLK_ENABLE();	// already did in main
 
   // Now we init GPIO Pins for TIM1
   __HAL_RCC_GPIOA_CLK_ENABLE();
