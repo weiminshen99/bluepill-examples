@@ -18,17 +18,24 @@ int main(void)
     __HAL_RCC_TIM2_CLK_ENABLE(); // this must be in the main(). Why?
 
     GPIO_Init();
+
     TIM2_PWM1_Init();
     TIM2_PWM1_GPIO_Init();
-    TIM1_PWM1_Init();
-    TIM1_PWM1_GPIO_Init();
+
+//    TIM1_PWM1_Init();
+//    TIM1_PWM1_GPIO_Init();
+//    TIM1_and_Pins_Init();
 
     while (1)
     {
     	while(CH1_DC < 65535)
     	{
     		TIM1->CCR1 = CH1_DC;
+    		TIM1->CCR2 = CH1_DC;
+    		TIM1->CCR3 = CH1_DC;
+
     		TIM2->CCR1 = CH1_DC;
+
     		CH1_DC += 70;
     		HAL_Delay(1);
     	}
@@ -36,7 +43,11 @@ int main(void)
     	while(CH1_DC > 0)
     	{
     		TIM1->CCR1 = CH1_DC;
+    		TIM1->CCR2 = CH1_DC;
+    		TIM1->CCR3 = CH1_DC;
+
     	    	TIM2->CCR1 = CH1_DC;
+
     	    	CH1_DC -= 70;
     	    	HAL_Delay(1);
     	}
