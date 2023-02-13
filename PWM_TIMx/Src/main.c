@@ -15,16 +15,17 @@ int main(void)
     __HAL_RCC_AFIO_CLK_ENABLE();
     __HAL_RCC_PWR_CLK_ENABLE();
     __HAL_RCC_TIM1_CLK_ENABLE(); // this must be in the main(). Why?
-//    __HAL_RCC_TIM2_CLK_ENABLE(); // this must be in the main(). Why?
+    __HAL_RCC_TIM2_CLK_ENABLE(); // this must be in the main(). Why?
 
     GPIO_Init();
 
-//    TIM2_PWM1_Init();
-//    TIM2_PWM1_GPIO_Init();
+    TIM2_PWM1_Init();
+    TIM2_PWM1_GPIO_Init();
 
-//    TIM1_PWM1_Init();
-//    TIM1_PWM1_GPIO_Init();
-    TIM1_and_Pins_Init();
+    TIM1_PWM1_Init();
+    TIM1_PWM1_GPIO_Init();
+
+//    TIM1_and_Pins_Init();
 
     while (1)
     {

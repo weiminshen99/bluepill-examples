@@ -14,9 +14,12 @@
 
 TIM_HandleTypeDef tim1_handle;
 
+// This function init TIM1 and its I/O Pins
+
+#include "defines.h"
+
 TIM_HandleTypeDef htim_right;
 
-// This function init TIM1 and its I/O Pins
 void TIM1_and_Pins_Init(void)
 {
   htim_right.Instance               = TIM1;
