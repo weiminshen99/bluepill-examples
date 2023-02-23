@@ -35,6 +35,7 @@ void TIM1_and_Pins_Init(void)
   sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
   HAL_TIM_ConfigClockSource(&htim_right, &sClockSourceConfig);
   HAL_TIM_PWM_Init(&htim_right);
+  //if (HAL_TIM_PWM_Init(&htim_right) == HAL_ERROR) printf("BBBBADD");
 
   TIM_MasterConfigTypeDef sMasterConfig = {0};
   sMasterConfig.MasterOutputTrigger = TIM_TRGO_ENABLE; // TIM_TRGO_DISABLE
@@ -45,7 +46,7 @@ void TIM1_and_Pins_Init(void)
   sConfigOC.OCMode       = TIM_OCMODE_PWM1;
   sConfigOC.Pulse        = 0;
   sConfigOC.OCPolarity   = TIM_OCPOLARITY_HIGH;
-  sConfigOC.OCNPolarity  = TIM_OCNPOLARITY_LOW;
+  sConfigOC.OCNPolarity  = TIM_OCNPOLARITY_HIGH; // TIM_OCNPOLARITY_LOW;
   sConfigOC.OCFastMode   = TIM_OCFAST_DISABLE;
   sConfigOC.OCIdleState  = TIM_OCIDLESTATE_RESET;
   sConfigOC.OCNIdleState = TIM_OCNIDLESTATE_SET;

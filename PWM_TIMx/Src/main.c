@@ -5,6 +5,7 @@
 
 void SystemClock_Config(void);
 void GPIO_Init();
+void TIM1_and_Pins_Init();
 
 int main(void)
 {
@@ -19,17 +20,18 @@ int main(void)
 
     GPIO_Init();
 
+    // for TIM2
     TIM2_PWM1_Init();
     TIM2_PWM1_GPIO_Init();
 
-    TIM1_PWM1_Init();
-    TIM1_PWM1_GPIO_Init();
-
-//    TIM1_and_Pins_Init();
+    // for TIM1
+    // TIM1_PWM1_Init();		// CH1 only
+    // TIM1_PWM1_GPIO_Init();	// CH1 only
+    TIM1_and_Pins_Init();  // three channels, CH1, CH2, CH3
 
     while (1)
     {
-    	while(CH1_DC < 65535)
+    	while(CH1_DC < 2000) // 65535
     	{
     		TIM1->CCR1 = CH1_DC;
     		TIM1->CCR2 = CH1_DC;
@@ -37,10 +39,9 @@ int main(void)
 
     		TIM2->CCR1 = CH1_DC;
 
-    		CH1_DC += 70;
+    		CH1_DC += 10;
     		HAL_Delay(1);
     	}
-    	//CH1_DC = 65535;
     	while(CH1_DC > 0)
     	{
     		TIM1->CCR1 = CH1_DC;
@@ -49,10 +50,9 @@ int main(void)
 
     	    	TIM2->CCR1 = CH1_DC;
 
-    	    	CH1_DC -= 70;
+    	    	CH1_DC -= 10;
     	    	HAL_Delay(1);
     	}
-    	//CH1_DC = 0;
 
 	HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
     }
