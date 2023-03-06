@@ -30,11 +30,11 @@
 
 // Hall sensor inputs on PB5, PB6, PB7
 #define HALL_U_PORT GPIOB
-#define HALL_U_PIN GPIO_PIN_5
+#define HALL_U_PIN GPIO_PIN_6
 #define HALL_V_PORT GPIOB
-#define HALL_V_PIN GPIO_PIN_6
+#define HALL_V_PIN GPIO_PIN_7
 #define HALL_W_PORT GPIOB
-#define HALL_W_PIN GPIO_PIN_7
+#define HALL_W_PIN GPIO_PIN_8
 
 // From SimpleFOC examples for Bluepill:
 // BLDCDriver6PWM(IN1_H,  IN1_L, IN2_H,  IN2_L,  IN3_H, IN3_L, enable(optional))

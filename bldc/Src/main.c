@@ -1,3 +1,17 @@
+/*
+Hall sensors are:
+ (hall_a PB6)
+ (hall_b,PB7)
+ (hall_c,PB8)
+PWM outputs are:
+ (A_t PA8)
+ (B_t PA9)
+ (C_t PA10)
+ (A_b PB13)
+ (B_b PB14)
+ (C_b PB15)
+*/
+
 
 #include "stm32f1xx_hal.h"
 #include "defines.h"
@@ -6,44 +20,79 @@
 void SystemClock_Config(void);
 void LED_Init();
 void TIM1_and_Pins_Init();
-
 extern TIM_HandleTypeDef htim_right;	// timer1 handle
 
-void get_next_hall_readings(int index, uint8_t *hall_a, uint8_t *hall_b, uint8_t *hall_c)
+int speed = 50;		// speed = [0, 1000]
+uint8_t position  = 1;	// there are 6 positions, if using hall sensors
+uint8_t direction = 1;	// 1: forward, -1: backward
+
+int pwm = 50;		// pwm=speed*direction: [-1000, 0, 1000],
+uint8_t hall_a, hall_b, hall_c;
+int u, v, w;
+
+
+// ===================================
+void read_hall_sensors()
+{
+    hall_a = !(HALL_U_PORT->IDR & HALL_U_PIN);
+    hall_b = !(HALL_V_PORT->IDR & HALL_V_PIN);
+    hall_c = !(HALL_W_PORT->IDR & HALL_W_PIN);
+}
+
+// ===========================================
+void simulate_hall_readings(int index)
 {
      switch(index) {
-        case 0: *hall_a=1; *hall_b=0; *hall_c=0; break;
-        case 1: *hall_a=1; *hall_b=1; *hall_c=0; break;
-        case 2: *hall_a=0; *hall_b=1; *hall_c=0; break;
-        case 3: *hall_a=0; *hall_b=1; *hall_c=1; break;
-        case 4: *hall_a=0; *hall_b=0; *hall_c=1; break;
-        case 5: *hall_a=1; *hall_b=0; *hall_c=1; break;
-        default: *hall_a=1; *hall_b=0; *hall_c=0;
+        case 0:  hall_a=1; hall_b=0; hall_c=0; break;
+        case 1:  hall_a=1; hall_b=1; hall_c=0; break;
+        case 2:  hall_a=0; hall_b=1; hall_c=0; break;
+        case 3:  hall_a=0; hall_b=1; hall_c=1; break;
+        case 4:  hall_a=0; hall_b=0; hall_c=1; break;
+        case 5:  hall_a=1; hall_b=0; hall_c=1; break;
+        default: hall_a=1; hall_b=0; hall_c=0;
      }
 }
 
-void hall_to_PWM(int pwm, int hall_a, int hall_b, int hall_c, int *u, int *v, int *w) 
+// ======================================================================
+// For hall sensors, only six positions
+void hall_to_position(uint8_t hall_a, uint8_t hall_b, uint8_t hall_c, uint8_t *pos)
 {
-  int minus_pwm = -pwm;;
-  //  minus_pwm = -1000; // testing
-
-  if (hall_a==1 && hall_b==0 && hall_c==0) {            // if hall is 100
-     *u = pwm;  *v = 0;     *w = minus_pwm;             //      A -> C
-  } else if (hall_a==1 && hall_b==1 && hall_c==0) {     // if hall is 110
-     *u = pwm;  *v = minus_pwm;  *w = 0;                //      A -> B
-  } else if (hall_a==0 && hall_b==1 && hall_c==0) {     // if hall is 010
-     *u = 0;  *v = minus_pwm;  *w = pwm;                //      C -> B
-  } else if (hall_a==0 && hall_b==1 && hall_c==1) {     // if hall is 011
-     *u = minus_pwm;  *v = 0;  *w = pwm;                //      C -> A
-  } else if (hall_a==0 && hall_b==0 && hall_c==1) {     // if hall is 001
-     *u = minus_pwm;  *v = pwm;  *w = 0;                //      B -> A
-  } else if (hall_a==1 && hall_b==0 && hall_c==1) {     // if hall is 101
-     *u = 0;  *v = pwm;  *w = minus_pwm;                //      B -> C
-  } else {                                              // otherwise
-     *u = 0;  *v = 0;  *w = 0;                          // do nothing
-  }
+    if      (hall_a==1 && hall_b==0 && hall_c==0) { *pos=1; }
+    else if (hall_a==1 && hall_b==1 && hall_c==0) { *pos=2; }
+    else if (hall_a==0 && hall_b==1 && hall_c==0) { *pos=3; }
+    else if (hall_a==0 && hall_b==1 && hall_c==1) { *pos=4; }
+    else if (hall_a==0 && hall_b==0 && hall_c==1) { *pos=5; }
+    else if (hall_a==1 && hall_b==0 && hall_c==1) { *pos=6; }
+    else  { *pos=1; } // default
 }
 
+// ===========================================
+void position_direction_to_PWM(uint8_t pos, uint8_t dir, int pwm, int *u, int *v, int *w)
+{
+   if (dir == 1) {
+      switch (pos) {
+     	case 1:  *u = pwm;  *v = 0; *w = -pwm; break; // A->C
+     	case 2:  *u = pwm;  *v = -pwm; *w = 0; break; // A->B
+     	case 3:  *u = 0;  *v = -pwm; *w = pwm; break; // C->B
+     	case 4:  *u = -pwm; *v = 0;  *w = pwm; break; // C->A
+     	case 5:  *u = -pwm; *v = pwm;  *w = 0; break; // B->A
+     	case 6:  *u = 0; *v = pwm;  *w = -pwm; break; // B->C
+     	default: *u = 0;  *v = 0;  *w = 0;            // else, no pwm
+      }
+   } else {
+     switch (pos) {
+     	case 1:  *u = -pwm; *v = pwm;  *w = 0; break; // B->A
+     	case 2:  *u = -pwm; *v = 0;  *w = pwm; break; // C->A
+     	case 3:  *u = 0;  *v = -pwm; *w = pwm; break; // C->B
+     	case 4:  *u = pwm;  *v = -pwm; *w = 0; break; // A->B
+     	case 5:  *u = pwm;  *v = 0; *w = -pwm; break; // A->C
+     	case 6:  *u = 0; *v = pwm;  *w = -pwm; break; // B->C
+     	default: *u = 0;  *v = 0;  *w = 0;            // else, no pwm
+     }
+   }
+}
+
+// ===========================================
 int main(void)
 {
     HAL_Init();
@@ -57,21 +106,17 @@ int main(void)
 
     TIM1_and_Pins_Init();  // three channels, CH1, CH2, CH3
 
-    int pwm = 900; // speed
     int main_loop_counter = 0;
-    uint8_t hall_a, hall_b, hall_c;
-    int u, v, w;
 
-    while(1) {
+  while(1) {
 
-    // read hall sensors
-    //hall_a = !(HALL_U_PORT->IDR & HALL_U_PIN);
-    //hall_b = !(HALL_V_PORT->IDR & HALL_V_PIN);
-    //hall_c = !(HALL_W_PORT->IDR & HALL_W_PIN);
+    //read_hall_sensors();
+    simulate_hall_readings(main_loop_counter%6);
+    //hall_a=1; hall_b=0; hall_c=0;
 
-    get_next_hall_readings(main_loop_counter%6, &hall_a, &hall_b, &hall_c);
+    hall_to_position(hall_a, hall_b, hall_c, &position);
 
-    hall_to_PWM(pwm, hall_a, hall_b, hall_c, &u, &v, &w);
+    position_direction_to_PWM(position, direction, pwm, &u, &v, &w);
 
     /*
     MOTOR_TIM->MOTOR_TIM_U = CLAMP(u + pwm_res/2, 10, pwm_res-10);
@@ -106,7 +151,7 @@ int main(void)
         HAL_TIMEx_PWMN_Stop(&htim_right, TIM_CHANNEL_3);
     }
 
-    HAL_Delay(20); // the duration for the each PWM state
+    HAL_Delay(5); // the duration for the each PWM state
 
     main_loop_counter += 1;
 
@@ -117,10 +162,19 @@ int main(void)
 }
 
 
-/**
-  * @brief SysTick Handler
-  * @retval None
-  */
+// ============================================
+void LED_Init(void)
+{  // For PC13 LED
+    __HAL_RCC_GPIOC_CLK_ENABLE();
+    GPIO_InitTypeDef GPIO_InitStruct = {0};
+    GPIO_InitStruct.Pin = GPIO_PIN_13;
+    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+}
+
+
+// ===============================
 void SysTick_Handler(void)
 {
   HAL_IncTick();	// needed for HAL_Delay
@@ -163,19 +217,6 @@ void SystemClock_Config(void)
   }
 }
 
-// ============================================
-void LED_Init(void)
-{  // For PC13 LED
-    __HAL_RCC_GPIOC_CLK_ENABLE();
-    GPIO_InitTypeDef GPIO_InitStruct = {0};
-    GPIO_InitStruct.Pin = GPIO_PIN_13;
-    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-    HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-}
-
-
-// ===========================================
 void Error_Handler()
 {
 }
