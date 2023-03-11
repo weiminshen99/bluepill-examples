@@ -39,17 +39,17 @@ int main(void)
     	AD_RES = HAL_ADC_GetValue(&hadc1);
     	TIM2->CCR1 = (AD_RES<<4);
     	HAL_Delay(100);
-
         HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
     }
 
     while (0) // Method2: generate an interrupt upon completion of conversion
     {
         // Start ADC Conversion
-        HAL_ADC_Start_IT(&hadc1);
+        HAL_ADC_Start_IT(&hadc1);	// Using Interrupt
         // Update The PWM Duty Cycle With Latest ADC Conversion Result
         TIM2->CCR1 = (AD_RES<<4);
-        HAL_Delay(1);
+        HAL_Delay(100);
+        HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
     }
 
     while (0) // Method3: generate a DMA upon completion
@@ -57,7 +57,8 @@ int main(void)
         // Start ADC Conversion
         // Pass (The ADC Instance, Result Buffer Address, Buffer Length)
         HAL_ADC_Start_DMA(&hadc1, &AD_RES, 1);
-        HAL_Delay(1);
+        HAL_Delay(100);
+        HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
     }
 }
 
@@ -69,6 +70,7 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
     AD_RES = HAL_ADC_GetValue(&hadc1);
 }
 */
+
 
 // For ADC -> DMA
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
