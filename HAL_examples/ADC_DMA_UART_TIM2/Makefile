@@ -40,8 +40,9 @@ $(DRIVERS_DIR)/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_uart.c \
 $(DRIVERS_DIR)/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_dma.c \
 Src/system_stm32f1xx.c \
 Src/stm32f1xx_it.c \
+Src/stm32f1xx_hal_msp.c \
 Src/main.c
-#Src/stm32f1xx_hal_msp.c \  <==== No need, merged into main.c
+
 
 # ASM sources
 ASM_SOURCES =  \

@@ -14,27 +14,30 @@ OPT = -Og
 # Build path
 BUILD_DIR = build
 
+# Drivers
+DRIVERS_DIR = ../Drivers_V1.1.1
+
 ######################################
 # source
 ######################################
 # C sources
 C_SOURCES =  \
-../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_flash.c \
-../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_pwr.c \
-../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc.c \
-../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim.c \
-../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim_ex.c \
-../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_gpio_ex.c \
-../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_adc_ex.c \
-../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_cortex.c \
-../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_flash_ex.c \
-../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_gpio.c \
-../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c \
-../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal.c \
-../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_adc.c \
-../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_uart.c \
-../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_i2c.c \
-../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_dma.c \
+$(DRIVERS_DIR)/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_flash.c \
+$(DRIVERS_DIR)/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_pwr.c \
+$(DRIVERS_DIR)/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc.c \
+$(DRIVERS_DIR)/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim.c \
+$(DRIVERS_DIR)/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim_ex.c \
+$(DRIVERS_DIR)/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_gpio_ex.c \
+$(DRIVERS_DIR)/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_adc_ex.c \
+$(DRIVERS_DIR)/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_cortex.c \
+$(DRIVERS_DIR)/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_flash_ex.c \
+$(DRIVERS_DIR)/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_gpio.c \
+$(DRIVERS_DIR)/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c \
+$(DRIVERS_DIR)/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal.c \
+$(DRIVERS_DIR)/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_adc.c \
+$(DRIVERS_DIR)/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_uart.c \
+$(DRIVERS_DIR)/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_i2c.c \
+$(DRIVERS_DIR)/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_dma.c \
 Src/system_stm32f1xx.c \
 Src/stm32f1xx_it.c \
 Src/main.c \
@@ -100,10 +103,10 @@ AS_INCLUDES =
 # C includes
 C_INCLUDES =  \
 -IInc \
--I../Drivers/STM32F1xx_HAL_Driver/Inc \
--I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy \
--I../Drivers/CMSIS/Device/ST/STM32F1xx/Include \
--I../Drivers/CMSIS/Include
+-I$(DRIVERS_DIR)/STM32F1xx_HAL_Driver/Inc \
+-I$(DRIVERS_DIR)/STM32F1xx_HAL_Driver/Inc/Legacy \
+-I$(DRIVERS_DIR)/CMSIS/Device/ST/STM32F1xx/Include \
+-I$(DRIVERS_DIR)/CMSIS/Include
 
 
 # compile gcc flags
