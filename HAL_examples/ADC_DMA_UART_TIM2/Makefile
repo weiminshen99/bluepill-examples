@@ -16,31 +16,32 @@ BUILD_DIR = build
 
 # Driver path
 DRIVERS_DIR = ./Drivers_V1.0.4
+#DRIVERS_DIR = ../Drivers_V1.1.1
 
 ######################################
 # source
 ######################################
 # C sources
 C_SOURCES =  \
+$(DRIVERS_DIR)/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal.c \
+$(DRIVERS_DIR)/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_cortex.c \
 $(DRIVERS_DIR)/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_flash.c \
+$(DRIVERS_DIR)/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_flash_ex.c \
 $(DRIVERS_DIR)/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_pwr.c \
 $(DRIVERS_DIR)/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc.c \
+$(DRIVERS_DIR)/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c \
 $(DRIVERS_DIR)/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim.c \
 $(DRIVERS_DIR)/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim_ex.c \
-$(DRIVERS_DIR)/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_gpio_ex.c \
-$(DRIVERS_DIR)/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_adc_ex.c \
-$(DRIVERS_DIR)/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_cortex.c \
-$(DRIVERS_DIR)/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_flash_ex.c \
 $(DRIVERS_DIR)/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_gpio.c \
-$(DRIVERS_DIR)/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c \
-$(DRIVERS_DIR)/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal.c \
+$(DRIVERS_DIR)/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_gpio_ex.c \
 $(DRIVERS_DIR)/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_adc.c \
+$(DRIVERS_DIR)/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_adc_ex.c \
 $(DRIVERS_DIR)/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_uart.c \
 $(DRIVERS_DIR)/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_dma.c \
 Src/system_stm32f1xx.c \
 Src/stm32f1xx_it.c \
-Src/stm32f1xx_hal_msp.c \
 Src/main.c
+#Src/stm32f1xx_hal_msp.c \  <==== No need, merged into main.c
 
 # ASM sources
 ASM_SOURCES =  \
