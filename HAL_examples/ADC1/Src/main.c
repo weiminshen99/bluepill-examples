@@ -1,12 +1,14 @@
 #include "stm32f1xx_hal.h"
 
 ADC_HandleTypeDef hadc1;
+DMA_HandleTypeDef hdma_adc1;
 TIM_HandleTypeDef htim2;
 
 void Error_Handler(void);
 void SystemClock_Config(void);
 static void ADC1_Init(void);
 static void ADC1_GPIO_Init(void);
+//static void MX_DMA_Init(void);
 static void TIM2_Init(void);
 static void TIM2_GPIO_Init(void);
 static void LED_GPIO_Init(void);
@@ -30,9 +32,12 @@ int main(void)
 
     ADC1_Init();
     ADC1_GPIO_Init();
+
+    //MX_DMA_Init();
+
     HAL_ADCEx_Calibration_Start(&hadc1);
 
-    while (1) // Method 1: Poll ADC by yourself
+    while (0) // Method 1: Poll ADC by yourself
     {
         HAL_ADC_Start(&hadc1);
     	HAL_ADC_PollForConversion(&hadc1, 1); // Poll ADC1 CH1 & TimeOut=1ms
@@ -44,34 +49,88 @@ int main(void)
 
     while (0) // Method2: generate an interrupt upon completion of conversion
     {
-        // Start ADC Conversion
-        HAL_ADC_Start_IT(&hadc1);	// Using Interrupt
-        // Update The PWM Duty Cycle With Latest ADC Conversion Result
+        // Start ADC1 Conversion with Interrupt
+        HAL_ADC_Start_IT(&hadc1);
+        // When ADC1 completes a coversion, it will generate an interrupt which will call ADC1_2_IRQHandler
         TIM2->CCR1 = (AD_RES<<4);
         HAL_Delay(100);
-        HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
     }
 
-    while (0) // Method3: generate a DMA upon completion
+    while (1) // Method3: generate a DMA upon completion
     {
         // Start ADC Conversion
         // Pass (The ADC Instance, Result Buffer Address, Buffer Length)
-        HAL_ADC_Start_DMA(&hadc1, &AD_RES, 1);
+        HAL_ADC_Start(&hadc1);
+        //HAL_ADC_Start_DMA(&hadc1, &AD_RES, 1);
+        //HAL_DMA_Start_IT(&hdma_adc1, &hadc1, &AD_RES, 1);
+
         HAL_Delay(100);
-        HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
     }
 }
 
-/*
+
+void ADC1_2_IRQHandler(void)
+{
+    HAL_ADC_IRQHandler(&hadc1);
+
+    AD_RES = HAL_ADC_GetValue(&hadc1);
+    HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
+
+    __HAL_ADC_CLEAR_FLAG(&hadc1, ADC_FLAG_EOC);
+}
+
+
+/* this is not working
 // For ADC -> Interrupt
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
 {
     // Read & Update The ADC Result
     AD_RES = HAL_ADC_GetValue(&hadc1);
+>    HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
 }
 */
 
+/*
+static void MX_DMA_Init(void)
+{
+    // DMA controller clock enable
+    __HAL_RCC_DMA1_CLK_ENABLE();
 
+    hdma_adc1.Instance = DMA1_Channel1;
+    hdma_adc1.Init.Direction = DMA_PERIPH_TO_MEMORY;
+    hdma_adc1.Init.PeriphInc = DMA_PINC_DISABLE;
+    hdma_adc1.Init.MemInc = DMA_MINC_ENABLE;
+    hdma_adc1.Init.PeriphDataAlignment = DMA_PDATAALIGN_HALFWORD;
+    hdma_adc1.Init.MemDataAlignment = DMA_MDATAALIGN_HALFWORD;
+    hdma_adc1.Init.Mode = DMA_CIRCULAR;
+    hdma_adc1.Init.Priority = DMA_PRIORITY_LOW;
+    if (HAL_DMA_Init(&hdma_adc1) != HAL_OK)
+    {
+      Error_Handler();
+    }
+
+    __HAL_DMA_ENABLE(&hdma_adc1);
+
+//    HAL_DMA_Start_IT(&hdma_adc1, &hadc1, &AD_RES, 1);
+
+//   __HAL_LINKDMA(&hadc1, &hdma_adc1);
+
+    // DMA interrupt init
+    // DMA1_Channel1_IRQn interrupt configuration
+    HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 0, 0);
+    HAL_NVIC_EnableIRQ(DMA1_Channel1_IRQn);
+}
+*/
+
+void DMA1_Channel1_IRQHandler(void)
+{
+    DMA1->IFCR = DMA_IFCR_CTCIF1; // clear DMA1_ch1 flag
+
+    TIM2->CCR1 = (AD_RES<<4);
+    HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
+}
+
+/*
 // For ADC -> DMA
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
 {
@@ -79,8 +138,9 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
     // So The AD_RES Is Now Updated & Let's Move IT To The PWM CCR1
     // Update The PWM Duty Cycle With Latest ADC Conversion Result
     TIM2->CCR1 = (AD_RES<<4);
+    HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
 }
-
+*/
 
 /**
   * @brief System Clock Configuration
@@ -160,6 +220,27 @@ static void ADC1_Init(void)
 
   __HAL_ADC_ENABLE(&hadc1);
   __HAL_RCC_DMA1_CLK_ENABLE();
+
+  /*Configure the ADC IRQ priority */
+  HAL_NVIC_SetPriority(ADC1_2_IRQn, 0, 0);
+  /* Enable the ADC global Interrupt */
+  HAL_NVIC_EnableIRQ(ADC1_2_IRQn);
+
+  // magically, the following links adc1 to DMA1_Cheannel1
+  hadc1.Instance->CR2 |= ADC_CR2_DMA | ADC_CR2_TSVREFE;
+  __HAL_ADC_ENABLE(&hadc1);
+  __HAL_RCC_DMA1_CLK_ENABLE();
+
+  DMA1_Channel1->CCR   = 0;
+  DMA1_Channel1->CNDTR = 1;	// =length?
+  DMA1_Channel1->CPAR  = (uint32_t) & (ADC1->DR);
+  DMA1_Channel1->CMAR  = (uint32_t) & (AD_RES);
+  DMA1_Channel1->CCR   = DMA_CCR_MSIZE_1 | DMA_CCR_PSIZE_1 | DMA_CCR_MINC | DMA_CCR_CIRC | DMA_CCR_TCIE;
+  DMA1_Channel1->CCR |= DMA_CCR_EN;
+
+  // start interrupt from DMA1_Channel1
+  HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Channel1_IRQn);
 }
 
 /**

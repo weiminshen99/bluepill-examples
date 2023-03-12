@@ -55,6 +55,7 @@ Src/main.c \
 # ASM sources
 ASM_SOURCES =  \
 Src/startup_stm32f103xb.s
+#$(DRIVERS_DIR)/CMSIS/Device/ST/STM32F1xx/Source/Templates/arm/startup_stm32f103xb.s
 #startup_stm32f103xe.s
 
 #######################################
