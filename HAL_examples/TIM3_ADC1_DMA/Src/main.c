@@ -9,7 +9,7 @@ void Error_Handler(void);
 void SystemClock_Config(void);
 static void ADC1_Init(void);
 static void ADC1_GPIO_Init(void);
-//static void MX_DMA_Init(void);
+static void MX_DMA_Init(void);
 static void TIM2_Init(void);
 static void MX_TIM3_Init(void);
 static void LED_GPIO_Init(void);
@@ -34,7 +34,7 @@ int main(void)
     ADC1_Init();
     ADC1_GPIO_Init();
 
-    //MX_DMA_Init();
+    MX_DMA_Init();
 
     HAL_ADCEx_Calibration_Start(&hadc1);
 
@@ -113,7 +113,7 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
 }
 */
 
-/*
+
 static void MX_DMA_Init(void)
 {
     // DMA controller clock enable
@@ -134,16 +134,20 @@ static void MX_DMA_Init(void)
 
     __HAL_DMA_ENABLE(&hdma_adc1);
 
-//    HAL_DMA_Start_IT(&hdma_adc1, &hadc1, &AD_RES, 1);
-
-//   __HAL_LINKDMA(&hadc1, &hdma_adc1);
-
-    // DMA interrupt init
-    // DMA1_Channel1_IRQn interrupt configuration
+    HAL_DMA_Start_IT(&hdma_adc1, (uint32_t) &(ADC1->DR), (uint32_t) &(AD_RES), 1);
+/*
+    hdma_adc1.Instance->CCR   = 0;
+    hdma_adc1.Instance->CNDTR = 1;	// = length of data to be transferred
+    hdma_adc1.Instance->CPAR  = (uint32_t) & (ADC1->DR); // from adc1
+    hdma_adc1.Instance->CMAR  = (uint32_t) & (AD_RES);	  // to AD_RES in memory
+    hdma_adc1.Instance->CCR   = DMA_CCR_MSIZE_1 | DMA_CCR_PSIZE_1 | DMA_CCR_MINC | DMA_CCR_CIRC | DMA_CCR_TCIE;
+    hdma_adc1.Instance->CCR  |= DMA_CCR_EN;
+*/
+    // enable interrupt of DMA1_Channel1
     HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 0, 0);
     HAL_NVIC_EnableIRQ(DMA1_Channel1_IRQn);
 }
-*/
+
 
 //
 // For ADC1 -> DMA, this callback does not work for HAL_ADC_Start_DMA(__), don't know why
@@ -274,15 +278,18 @@ static void ADC1_Init(void)
 
   __HAL_ADC_ENABLE(&hadc1);
 
-  // when ADC1 is started with interrupt as HAL_ADC_Start_IT(_)
-  // the following two lines enables the interrupt to be generated
+  // If and when ADC1 is started with interrupt as HAL_ADC_Start_IT(&hadc1)
+  // then please uncomment these two lines to enable interrupt from ADC1
   // HAL_NVIC_SetPriority(ADC1_2_IRQn, 0, 0);
   // HAL_NVIC_EnableIRQ(ADC1_2_IRQn);
 
-  //
-  // magically, the following links adc1 to DMA1_Cheannel1 which generates interrupt
+  // If and when ADC1 wants to use DMA to transfer data to memory, then
+  // the following two lines will link adc1 to hdma_adc1 which generates interrupt
   //
   hadc1.Instance->CR2 |= ADC_CR2_DMA | ADC_CR2_TSVREFE;
+  hadc1.DMA_Handle = &hdma_adc1;
+
+/* Moved to MX_DMA_Init():
   __HAL_RCC_DMA1_CLK_ENABLE();
   DMA1_Channel1->CCR   = 0;
   DMA1_Channel1->CNDTR = 1;	// = length of data to be transferred
@@ -293,6 +300,7 @@ static void ADC1_Init(void)
   // enable interrupt from DMA1_Channel1
   HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(DMA1_Channel1_IRQn);
+*/
 }
 
 /**
