@@ -4,6 +4,7 @@ ADC_HandleTypeDef hadc1;
 DMA_HandleTypeDef hdma_adc1;
 TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim3;
+TIM_HandleTypeDef htim1;
 
 void Error_Handler(void);
 void SystemClock_Config(void);
@@ -11,6 +12,7 @@ static void ADC1_Init(void);
 static void ADC1_GPIO_Init(void);
 static void MX_DMA_Init(void);
 static void TIM2_Init(void);
+static void TIM1_and_Pins_Init(void);
 static void MX_TIM3_Init(void);
 static void LED_GPIO_Init(void);
 
@@ -29,7 +31,9 @@ int main(void)
     HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);	// you can listen or see led on this channel
 
     LED_GPIO_Init();
+
     MX_TIM3_Init();
+    TIM1_and_Pins_Init();
 
     ADC1_Init();
     ADC1_GPIO_Init();
@@ -71,12 +75,14 @@ int main(void)
     // Method-4: Use TIM3 to trigger ADC1
     HAL_ADC_Start(&hadc1); 	// need to start ADC1 only once, then
     HAL_TIM_Base_Start(&htim3); // TIM3 will trigger ADC1. Note: No TIM3, no ADC1.
-    // Trying to use TIM2 or TIM1 to trigger ADC1, still testing
-    //HAL_TIM_Base_Start(&htim2);
-    //HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);
+
+    // Trying to use TIM1 or TIM2 to trigger ADC1, still testing
+    HAL_TIM_Base_Start(&htim1);
+    //HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
     while (1)
     {   // In the loop, no need to call HAL_ADC_Start() again,
 	// because ADC1 is triggered automatically and periodically by TIM3
+    	TIM1->CCR1 = (AD_RES<<4);
         HAL_Delay(100);
         HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13); // show alive
     }
@@ -160,6 +166,79 @@ static void MX_DMA_Init(void)
 //    TIM2->CCR1 = (AD_RES<<4);
 //    HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
 //}
+
+void TIM1_and_Pins_Init(void)
+{
+  __HAL_RCC_TIM1_CLK_ENABLE();
+
+  htim1.Instance               = TIM1;
+  htim1.Init.Period            = 64000000 / 2 / 16000;
+  htim1.Init.Prescaler         = 0;
+  htim1.Init.CounterMode       = TIM_COUNTERMODE_CENTERALIGNED1;
+  htim1.Init.ClockDivision     = TIM_CLOCKDIVISION_DIV1;
+  htim1.Init.RepetitionCounter = 0;
+  htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim1) == HAL_ERROR) printf("BBBBADD");
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  HAL_TIM_ConfigClockSource(&htim1, &sClockSourceConfig);
+  HAL_TIM_PWM_Init(&htim1);
+  //if (HAL_TIM_PWM_Init(&htim1) == HAL_ERROR) printf("BBBBADD");
+
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_ENABLE; // TIM_TRGO_DISABLE
+  sMasterConfig.MasterSlaveMode     = TIM_MASTERSLAVEMODE_DISABLE;
+  HAL_TIMEx_MasterConfigSynchronization(&htim1, &sMasterConfig);
+
+  TIM_OC_InitTypeDef sConfigOC = {0};
+  sConfigOC.OCMode       = TIM_OCMODE_PWM1;
+  sConfigOC.Pulse        = 0;
+  sConfigOC.OCPolarity   = TIM_OCPOLARITY_HIGH;
+  sConfigOC.OCNPolarity  = TIM_OCNPOLARITY_HIGH; // TIM_OCNPOLARITY_LOW;
+  sConfigOC.OCFastMode   = TIM_OCFAST_DISABLE;
+  sConfigOC.OCIdleState  = TIM_OCIDLESTATE_RESET;
+  sConfigOC.OCNIdleState = TIM_OCNIDLESTATE_SET;
+  HAL_TIM_PWM_ConfigChannel(&htim1, &sConfigOC, TIM_CHANNEL_1);
+  HAL_TIM_PWM_ConfigChannel(&htim1, &sConfigOC, TIM_CHANNEL_2);
+  HAL_TIM_PWM_ConfigChannel(&htim1, &sConfigOC, TIM_CHANNEL_3);
+  TIM_BreakDeadTimeConfigTypeDef sBreakDeadTimeConfig = {0};
+  sBreakDeadTimeConfig.OffStateRunMode  = TIM_OSSR_ENABLE;
+  sBreakDeadTimeConfig.OffStateIDLEMode = TIM_OSSI_ENABLE;
+  sBreakDeadTimeConfig.LockLevel        = TIM_LOCKLEVEL_OFF;
+  sBreakDeadTimeConfig.DeadTime         = 48; // DEAD_TIME;
+  sBreakDeadTimeConfig.BreakState       = TIM_BREAK_DISABLE;
+  sBreakDeadTimeConfig.BreakPolarity    = TIM_BREAKPOLARITY_LOW;
+  sBreakDeadTimeConfig.AutomaticOutput  = TIM_AUTOMATICOUTPUT_ENABLE;
+  HAL_TIMEx_ConfigBreakDeadTime(&htim1, &sBreakDeadTimeConfig);
+
+  // Enable all three channels for PWM output
+  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
+  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3);
+  // Enable all three complemenary channels for PWM output
+  HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
+  HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_2);
+  HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_3);
+
+  __HAL_TIM_ENABLE(&htim1);
+//  __HAL_RCC_TIM1_CLK_ENABLE();        // already did in main
+
+  // Now we init GPIO Pins for TIM1
+  __HAL_RCC_GPIOA_CLK_ENABLE();
+  __HAL_RCC_GPIOB_CLK_ENABLE();
+
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+
+  GPIO_InitStruct.Pin = GPIO_PIN_8 | GPIO_PIN_9 | GPIO_PIN_10;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  GPIO_InitStruct.Pin = GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+}
+
 
 static void MX_TIM3_Init(void)
 {
@@ -254,8 +333,8 @@ static void ADC1_Init(void)
   hadc1.Init.ScanConvMode = ADC_SCAN_ENABLE;
   hadc1.Init.ContinuousConvMode = DISABLE;
   hadc1.Init.DiscontinuousConvMode = DISABLE;
-//  hadc1.Init.ExternalTrigConv = ADC_EXTERNALTRIGCONV_T2_CC2;
   hadc1.Init.ExternalTrigConv = ADC_EXTERNALTRIGCONV_T3_TRGO;
+//  hadc1.Init.ExternalTrigConv = ADC_EXTERNALTRIGCONV_T1_CC1;
 //  hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
   hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
   hadc1.Init.NbrOfConversion = 1;
@@ -284,8 +363,8 @@ static void ADC1_Init(void)
   // HAL_NVIC_EnableIRQ(ADC1_2_IRQn);
 
   // If and when ADC1 wants to use DMA to transfer data to memory, then
-  // the following two lines will link adc1 to hdma_adc1 which generates interrupt
-  //
+  // 1. set ADC1's control register CR2 to use DMA or TSVREFE (page 240)
+  // 2. link ADC1 to DMA
   hadc1.Instance->CR2 |= ADC_CR2_DMA | ADC_CR2_TSVREFE;
   hadc1.DMA_Handle = &hdma_adc1;
 
