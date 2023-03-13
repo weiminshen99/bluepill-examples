@@ -12,7 +12,7 @@ static void ADC1_Init(void);
 static void ADC1_GPIO_Init(void);
 static void MX_DMA_Init(void);
 static void TIM2_Init(void);
-static void TIM1_and_Pins_Init(void);
+static void TIM1_Init_w_GPIO(void);
 static void MX_TIM3_Init(void);
 static void LED_GPIO_Init(void);
 
@@ -27,18 +27,11 @@ int main(void)
     HAL_Init();
     SystemClock_Config();
 
-    TIM2_Init();
-    HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);	// you can listen or see led on this channel
+    TIM2_Init(); HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);	// you can listen or see led on this channel
+
+    ADC1_Init(); ADC1_GPIO_Init();
 
     LED_GPIO_Init();
-
-    MX_TIM3_Init();
-    TIM1_and_Pins_Init();
-
-    ADC1_Init();
-    ADC1_GPIO_Init();
-
-    MX_DMA_Init();
 
     HAL_ADCEx_Calibration_Start(&hadc1);
 
@@ -49,52 +42,53 @@ int main(void)
     {
         HAL_ADC_Start(&hadc1);			// Start ADC1 normally
     	HAL_ADC_PollForConversion(&hadc1, 1); 	// Poll ADC1_CH1 & TimeOut=1ms
-    	AD_RES = HAL_ADC_GetValue(&hadc1);	// Get the data from ADC1
-    	TIM2->CCR1 = (AD_RES<<4);		// Use the data to control TIM2_CH1_PWM
+    	AD_RES = HAL_ADC_GetValue(&hadc1);	// Get the data from ADC1 to AD_RES
+    	TIM2->CCR1 = (AD_RES<<4);		// Use the new AD_RES to control TIM2_CH1_PWM
     	HAL_Delay(100);
         HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
     }
 
-    while (0) // Method-2: ADC1 generates an interrupt upon completion of conversion
-    {
-        HAL_ADC_Start_IT(&hadc1);  // Start ADC1 with Interrupt
-        // When ADC1 completes a coversion, it will generate an interrupt which will call ADC1_2_IRQHandler
-        TIM2->CCR1 = (AD_RES<<4);
-        HAL_Delay(100);
+    //
+    // Method-2: Start ADC1 with interrupt upon conversion completion
+    //           the interrupt will be handled by ADC1_2_IRQHandler which save the new data to AD_RES
+    //
+    	HAL_ADC_Start_IT(&hadc1);
+    // How to trigger ADC1 activity:
+    // 2.1. To use TIM3 to trigger ADC1, change ADC1's trigger to be T3_TRGO
+    	// MX_TIM3_Init();
+	// HAL_TIM_Base_Start(&htim3); // TIM3 trigger ADC1
+    // 2.2. To use TIM1 to trigger ADC1: change ADC1's trigger to be T1_CC1
+    	TIM1_Init_w_GPIO();
+	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+	TIM1->CCR1 = 50; // to trigger ADC1, TIM1->CCR1 must have some activities
+    while (1)
+    {   // 2.3. If ADC1 is software triggered set in ADC1_Init(), then it must be started everytime to use it
+        // HAL_ADC_Start_IT(&hadc1);
+        TIM2->CCR1 = (AD_RES<<4); // AD_RES has the new data by ADC1_2_IRQHandler, ready to use
+        //HAL_Delay(100); HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13); // show alive
     }
 
-    while (0) // Method-3: ADC1->DMA1, DMA1 generates an interrupt upon completion
+    //
+    // Method-3: ADC1->DMA1->&(AD_RES), this will generate an interrupt upon completion
+    // 		 DAM1_Channel1_IRQHandler will handle the new data at AD_RES
+    //           Setup: you must link ADC1 and DMA1_Channel1 in ADC1_Init() and DMA_Init()
+    MX_DMA_Init();
+    while (0)
     {
+        HAL_ADC_Start(&hadc1);
         //HAL_ADC_Start_DMA(&hadc1, &AD_RES, 1); // start ADC1 with DMA, not working
         //HAL_DMA_Start_IT(&hdma_adc1, &hadc1, &AD_RES, 1); // start ADC1+DMA, not working
-        HAL_ADC_Start(&hadc1); // configure DMA1_Channel1 inside ADC1_Init() and start ADC1 normally
-	// for each interrupt from DAM1_Channel1, use DAM1_Channel1_IRQHandler to access the data
         HAL_Delay(100);
-    }
-
-    // Method-4: Use TIM3 to trigger ADC1
-    HAL_ADC_Start(&hadc1); 	// need to start ADC1 only once, then
-    HAL_TIM_Base_Start(&htim3); // TIM3 will trigger ADC1. Note: No TIM3, no ADC1.
-
-    // Trying to use TIM1 or TIM2 to trigger ADC1, still testing
-    HAL_TIM_Base_Start(&htim1);
-    //HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
-    while (1)
-    {   // In the loop, no need to call HAL_ADC_Start() again,
-	// because ADC1 is triggered automatically and periodically by TIM3
-    	TIM1->CCR1 = (AD_RES<<4);
-        HAL_Delay(100);
-        HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13); // show alive
     }
 }
 
 // This callback works Method-2 above
 // the interrupts are generated from HAL_ADC_Start_IT(&hadc1)
 void ADC1_2_IRQHandler(void)
-{
-    HAL_ADC_IRQHandler(&hadc1);	// this interrupt indicates that ADC1 has completed conversion
-    AD_RES = HAL_ADC_GetValue(&hadc1);		// now we can get data from ADC1 to AD_RES
-    HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);	// show here
+{   // this interrupt indicates that ADC1 has completed conversion
+    HAL_ADC_IRQHandler(&hadc1);
+    AD_RES = HAL_ADC_GetValue(&hadc1);		// get data from ADC1 to AD_RES
+    HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);	// show led here
     __HAL_ADC_CLEAR_FLAG(&hadc1, ADC_FLAG_EOC);	// clear this interrupt flag
 }
 
@@ -141,11 +135,11 @@ static void MX_DMA_Init(void)
     __HAL_DMA_ENABLE(&hdma_adc1);
 
     HAL_DMA_Start_IT(&hdma_adc1, (uint32_t) &(ADC1->DR), (uint32_t) &(AD_RES), 1);
-/*
+/*  the line above does the following:
     hdma_adc1.Instance->CCR   = 0;
     hdma_adc1.Instance->CNDTR = 1;	// = length of data to be transferred
-    hdma_adc1.Instance->CPAR  = (uint32_t) & (ADC1->DR); // from adc1
-    hdma_adc1.Instance->CMAR  = (uint32_t) & (AD_RES);	  // to AD_RES in memory
+    hdma_adc1.Instance->CPAR  = (uint32_t) & (ADC1->DR); // from adc1's Data Register DR
+    hdma_adc1.Instance->CMAR  = (uint32_t) & (AD_RES);	 // to address of AD_RES in memory
     hdma_adc1.Instance->CCR   = DMA_CCR_MSIZE_1 | DMA_CCR_PSIZE_1 | DMA_CCR_MINC | DMA_CCR_CIRC | DMA_CCR_TCIE;
     hdma_adc1.Instance->CCR  |= DMA_CCR_EN;
 */
@@ -167,17 +161,18 @@ static void MX_DMA_Init(void)
 //    HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
 //}
 
-void TIM1_and_Pins_Init(void)
+void TIM1_Init_w_GPIO(void)
 {
   __HAL_RCC_TIM1_CLK_ENABLE();
 
   htim1.Instance               = TIM1;
-  htim1.Init.Period            = 64000000 / 2 / 16000;
+  htim1.Init.Period            = 64000000 / 2 / 16000; // = 2000
   htim1.Init.Prescaler         = 0;
   htim1.Init.CounterMode       = TIM_COUNTERMODE_CENTERALIGNED1;
   htim1.Init.ClockDivision     = TIM_CLOCKDIVISION_DIV1;
   htim1.Init.RepetitionCounter = 0;
-  htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
+  //TIM1->ARR = 240000; // ARR: Auto reload register, determine how often to send trigger
   if (HAL_TIM_Base_Init(&htim1) == HAL_ERROR) printf("BBBBADD");
 
   TIM_ClockConfigTypeDef sClockSourceConfig = {0};
@@ -187,7 +182,7 @@ void TIM1_and_Pins_Init(void)
   //if (HAL_TIM_PWM_Init(&htim1) == HAL_ERROR) printf("BBBBADD");
 
   TIM_MasterConfigTypeDef sMasterConfig = {0};
-  sMasterConfig.MasterOutputTrigger = TIM_TRGO_ENABLE; // TIM_TRGO_DISABLE
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_UPDATE; // TIM_TRGO_ENABLE; // TIM_TRGO_DISABLE
   sMasterConfig.MasterSlaveMode     = TIM_MASTERSLAVEMODE_DISABLE;
   HAL_TIMEx_MasterConfigSynchronization(&htim1, &sMasterConfig);
 
@@ -221,22 +216,20 @@ void TIM1_and_Pins_Init(void)
   HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_2);
   HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_3);
 
-  __HAL_TIM_ENABLE(&htim1);
-//  __HAL_RCC_TIM1_CLK_ENABLE();        // already did in main
-
   // Now we init GPIO Pins for TIM1
-  __HAL_RCC_GPIOA_CLK_ENABLE();
-  __HAL_RCC_GPIOB_CLK_ENABLE();
-
   GPIO_InitTypeDef GPIO_InitStruct = {0};
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
 
+  __HAL_RCC_GPIOA_CLK_ENABLE();
   GPIO_InitStruct.Pin = GPIO_PIN_8 | GPIO_PIN_9 | GPIO_PIN_10;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
+  __HAL_RCC_GPIOB_CLK_ENABLE();
   GPIO_InitStruct.Pin = GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  __HAL_TIM_ENABLE(&htim1);
 }
 
 
@@ -253,24 +246,17 @@ static void MX_TIM3_Init(void)
   htim3.Init.Period = 72000000;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
-
   //TIM3->ARR = 240000; // ARR: Auto reload register, determine how often to send trigger
 
   if (HAL_TIM_Base_Init(&htim3) != HAL_OK)
-  {
 	Error_Handler();
-  }
   sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
   if (HAL_TIM_ConfigClockSource(&htim3, &sClockSourceConfig) != HAL_OK)
-  {
     	Error_Handler();
-  }
   sMasterConfig.MasterOutputTrigger = TIM_TRGO_UPDATE;
   sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
   if (HAL_TIMEx_MasterConfigSynchronization(&htim3, &sMasterConfig) != HAL_OK)
-  {
     	Error_Handler();
-  }
 }
 
 
@@ -333,9 +319,9 @@ static void ADC1_Init(void)
   hadc1.Init.ScanConvMode = ADC_SCAN_ENABLE;
   hadc1.Init.ContinuousConvMode = DISABLE;
   hadc1.Init.DiscontinuousConvMode = DISABLE;
-  hadc1.Init.ExternalTrigConv = ADC_EXTERNALTRIGCONV_T3_TRGO;
-//  hadc1.Init.ExternalTrigConv = ADC_EXTERNALTRIGCONV_T1_CC1;
 //  hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
+//  hadc1.Init.ExternalTrigConv = ADC_EXTERNALTRIGCONV_T3_TRGO;
+  hadc1.Init.ExternalTrigConv = ADC_EXTERNALTRIGCONV_T1_CC1;
   hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
   hadc1.Init.NbrOfConversion = 1;
   if (HAL_ADC_Init(&hadc1) != HAL_OK)
@@ -359,8 +345,8 @@ static void ADC1_Init(void)
 
   // If and when ADC1 is started with interrupt as HAL_ADC_Start_IT(&hadc1)
   // then please uncomment these two lines to enable interrupt from ADC1
-  // HAL_NVIC_SetPriority(ADC1_2_IRQn, 0, 0);
-  // HAL_NVIC_EnableIRQ(ADC1_2_IRQn);
+  HAL_NVIC_SetPriority(ADC1_2_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(ADC1_2_IRQn);
 
   // If and when ADC1 wants to use DMA to transfer data to memory, then
   // 1. set ADC1's control register CR2 to use DMA or TSVREFE (page 240)
