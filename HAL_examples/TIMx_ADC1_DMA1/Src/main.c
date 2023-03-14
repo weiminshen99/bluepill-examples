@@ -9,12 +9,11 @@ TIM_HandleTypeDef htim1;
 void Error_Handler(void);
 void SystemClock_Config(void);
 static void ADC1_Init(void);
-static void ADC1_GPIO_Init(void);
 static void MX_DMA_Init(void);
 static void TIM2_Init(void);
 static void TIM1_Init_w_GPIO(void);
 static void MX_TIM3_Init(void);
-static void LED_GPIO_Init(void);
+static void LED_Init(void);
 
 
 uint32_t AD_RES = 0;
@@ -27,11 +26,11 @@ int main(void)
     HAL_Init();
     SystemClock_Config();
 
-    TIM2_Init(); HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);	// you can listen or see led on this channel
+    TIM2_Init();
+    ADC1_Init();
+    LED_Init();
 
-    ADC1_Init(); ADC1_GPIO_Init();
-
-    LED_GPIO_Init();
+    HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);	// you can listen or see led on this channel
 
     HAL_ADCEx_Calibration_Start(&hadc1);
 
@@ -52,16 +51,18 @@ int main(void)
     // Method-2: Start ADC1 with interrupt upon conversion completion
     //           the interrupt will be handled by ADC1_2_IRQHandler which save the new data to AD_RES
     //
-    	HAL_ADC_Start_IT(&hadc1);
+    // HAL_ADC_Start_IT(&hadc1);
     // How to trigger ADC1 activity:
     // 2.1. To use TIM3 to trigger ADC1, change ADC1's trigger to be T3_TRGO
     	// MX_TIM3_Init();
 	// HAL_TIM_Base_Start(&htim3); // TIM3 trigger ADC1
     // 2.2. To use TIM1 to trigger ADC1: change ADC1's trigger to be T1_CC1
     	TIM1_Init_w_GPIO();
+  	TIM1->ARR = 2000; // the period to trigger ADC1, 2000 = 0.125 ms
 	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
 	TIM1->CCR1 = 50; // to trigger ADC1, TIM1->CCR1 must have some activities
-    while (1)
+
+    while (0)
     {   // 2.3. If ADC1 is software triggered set in ADC1_Init(), then it must be started everytime to use it
         // HAL_ADC_Start_IT(&hadc1);
         TIM2->CCR1 = (AD_RES<<4); // AD_RES has the new data by ADC1_2_IRQHandler, ready to use
@@ -73,12 +74,12 @@ int main(void)
     // 		 DAM1_Channel1_IRQHandler will handle the new data at AD_RES
     //           Setup: you must link ADC1 and DMA1_Channel1 in ADC1_Init() and DMA_Init()
     MX_DMA_Init();
-    while (0)
+    HAL_ADC_Start(&hadc1); // start ADC1 normally with DMA configured inside/with ADC1
+    //HAL_ADC_Start_DMA(&hadc1, &AD_RES, 1); // start ADC1 with DMA
+    //HAL_DMA_Start_IT(&hdma_adc1, &hadc1, &AD_RES, 1); // start ADC1+DMA, not working
+    while (1)
     {
-        HAL_ADC_Start(&hadc1);
-        //HAL_ADC_Start_DMA(&hadc1, &AD_RES, 1); // start ADC1 with DMA, not working
-        //HAL_DMA_Start_IT(&hdma_adc1, &hadc1, &AD_RES, 1); // start ADC1+DMA, not working
-        HAL_Delay(100);
+        HAL_Delay(1);
     }
 }
 
@@ -166,7 +167,7 @@ void TIM1_Init_w_GPIO(void)
   __HAL_RCC_TIM1_CLK_ENABLE();
 
   htim1.Instance               = TIM1;
-  htim1.Init.Period            = 64000000 / 2 / 16000; // = 2000
+  htim1.Init.Period            = 64000000 / 2 / 16000; // = 2000 = 0.125 ms
   htim1.Init.Prescaler         = 0;
   htim1.Init.CounterMode       = TIM_COUNTERMODE_CENTERALIGNED1;
   htim1.Init.ClockDivision     = TIM_CLOCKDIVISION_DIV1;
@@ -366,6 +367,16 @@ static void ADC1_Init(void)
   HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(DMA1_Channel1_IRQn);
 */
+
+    // Configure the GPIO Ports for ADC1
+    GPIO_InitTypeDef GPIO_InitStruct = {0};
+    GPIO_InitStruct.Mode  = GPIO_MODE_ANALOG;
+    GPIO_InitStruct.Pull  = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+
+    __HAL_RCC_GPIOA_CLK_ENABLE();
+    GPIO_InitStruct.Pin = GPIO_PIN_7;
+    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 }
 
 /**
@@ -444,24 +455,8 @@ static void TIM2_Init(void)
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 }
 
-/**
-  * @brief GPIO Initialization Function
-  * @param None
-  * @retval None
-  */
-static void ADC1_GPIO_Init(void)
-{
-    __HAL_RCC_GPIOA_CLK_ENABLE();
-    GPIO_InitTypeDef GPIO_InitStruct = {0};
-    GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-    GPIO_InitStruct.Pull  = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-
-    GPIO_InitStruct.Pin = GPIO_PIN_7;
-    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-}
-
-static void LED_GPIO_Init(void)
+// ========================================
+static void LED_Init(void)
 {  // For PC13 LED
     __HAL_RCC_GPIOC_CLK_ENABLE();
     GPIO_InitTypeDef GPIO_InitStruct = {0};
