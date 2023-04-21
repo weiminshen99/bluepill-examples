@@ -1,6 +1,3 @@
-# AARI Corporation, All Right Served
-# Author Wei-Min Shen, 3-10-2020
-
 ===== HARDWARE =====
 
 for programming:
