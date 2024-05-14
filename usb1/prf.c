@@ -121,6 +121,8 @@ sprintu( char *buf, char *end, unsigned int n, int b)
 
 /* -------------------------------------------------- */
 
+static int VSNPRINTF ( char *, unsigned int, const char *, va_list );
+
 static int
 snprintf(char * buf, unsigned int size, const char *fmt, ...)
 {
