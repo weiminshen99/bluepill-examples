@@ -8,7 +8,7 @@ TOOLS = arm-none-eabi
 AS = $(TOOLS)-as
 
 #COPTS = -mcpu=cortex-m3 -mthumb -Wno-implicit-function-declaration
-COPTS = -mcpu=cortex-m3 -mthumb -Wno-implicit-function-declaration -fno-builtin-printf
+COPTS = -mcpu=cortex-m3 -mthumb -Wno-implicit-function-declaration -fno-builtin
 # Use the -g flag if you intend to use gdb
 #CC = $(TOOLS)-gcc $(COPTS) -g 
 #CC = $(TOOLS)-gcc $(COPTS)

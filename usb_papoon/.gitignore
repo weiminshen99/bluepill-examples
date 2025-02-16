@@ -1,0 +1,11 @@
+*.o
+*.elf
+*.bin
+*.dump
+*.swp
+zzz
+zz
+z
+OLD
+OLD/*
+tags
